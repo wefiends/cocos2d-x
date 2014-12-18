@@ -49,7 +49,8 @@ static long getCurrentMillSecond()
 Application* Application::sm_pSharedApplication = 0;
 
 Application::Application()
-: _animationInterval(1.0f/60.0f*1000.0f)
+: _animationInterval(1.0f/60.0f*1000.0f),
+_shouldRestart(false)
 {
     CCASSERT(! sm_pSharedApplication, "sm_pSharedApplication already exist");
     sm_pSharedApplication = this;
@@ -247,6 +248,16 @@ void Application::setStartupScriptFilename(const std::string& startupScriptFile)
 const std::string& Application::getStartupScriptFilename(void)
 {
     return _startupScriptFilename;
+}
+
+void Application::setRestart(bool r)
+{
+    _shouldRestart = r;
+}
+
+bool Application::getRestart()
+{
+    return _shouldRestart;
 }
 
 NS_CC_END

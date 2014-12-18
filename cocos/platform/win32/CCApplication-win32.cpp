@@ -45,6 +45,7 @@ Application * Application::sm_pSharedApplication = 0;
 Application::Application()
 : _instance(nullptr)
 , _accelTable(nullptr)
+, _shouldRestart(false)
 {
     _instance    = GetModuleHandle(nullptr);
     _animationInterval.QuadPart = 0;
@@ -237,6 +238,16 @@ void Application::setStartupScriptFilename(const std::string& startupScriptFile)
 {
     _startupScriptFilename = startupScriptFile;
     std::replace(_startupScriptFilename.begin(), _startupScriptFilename.end(), '\\', '/');
+}
+
+void Application::setRestart(bool r)
+{
+    _shouldRestart = r;
+}
+
+bool Application::getRestart()
+{
+    return _shouldRestart;
 }
 
 NS_CC_END

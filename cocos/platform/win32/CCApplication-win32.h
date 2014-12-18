@@ -100,6 +100,10 @@ public:
     {
         return _startupScriptFilename;
     }
+    
+    void setRestart(bool r);
+    
+    bool getRestart();
 
 protected:
     HINSTANCE           _instance;
@@ -107,6 +111,7 @@ protected:
     LARGE_INTEGER       _animationInterval;
     std::string         _resourceRootPath;
     std::string         _startupScriptFilename;
+    bool                _shouldRestart;
 
     static Application * sm_pSharedApplication;
 };
