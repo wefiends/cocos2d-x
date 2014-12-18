@@ -102,9 +102,14 @@ public:
      @brief Get target platform
      */
     virtual Platform getTargetPlatform();
+    
+    void setRestart(bool r);
+    
+    bool getRestart();
 protected:
     long       _animationInterval;  //micro second
     std::string _resourceRootPath;
+    bool _shouldRestart;
     
 	static Application * sm_pSharedApplication;
 };

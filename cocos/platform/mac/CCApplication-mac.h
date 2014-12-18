@@ -114,12 +114,17 @@ public:
     
     const std::string& getStartupScriptFilename(void);
     
+    void setRestart(bool r);
+    
+    bool getRestart();
+    
 protected:
     static Application * sm_pSharedApplication;
     
     long _animationInterval;  //micro second
     std::string _resourceRootPath;
     std::string _startupScriptFilename;
+    bool _shouldRestart;
 };
 
 NS_CC_END

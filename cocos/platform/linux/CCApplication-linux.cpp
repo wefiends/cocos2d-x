@@ -49,7 +49,8 @@ static long getCurrentMillSecond() {
 }
 
 Application::Application()
-: _animationInterval(1.0f/60.0f*1000.0f)
+: _animationInterval(1.0f/60.0f*1000.0f),
+_shouldRestart(false)
 {
     CC_ASSERT(! sm_pSharedApplication);
     sm_pSharedApplication = this;
@@ -263,6 +264,16 @@ LanguageType Application::getCurrentLanguage()
     }
     
     return ret;
+}
+
+void Application::setRestart(bool r)
+{
+    _shouldRestart = r;
+}
+
+bool Application::getRestart()
+{
+    return _shouldRestart;
 }
 
 NS_CC_END
