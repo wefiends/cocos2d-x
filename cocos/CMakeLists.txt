@@ -39,26 +39,8 @@ include(math/CMakeLists.txt)
 include(renderer/CMakeLists.txt)
 include(base/CMakeLists.txt)
 include(deprecated/CMakeLists.txt)
-include(ui/CMakeLists.txt)
 include(network/CMakeLists.txt)
-include(audio/CMakeLists.txt)
-include_directories(audio/include)
 include(storage/CMakeLists.txt)
-
-if(BUILD_EDITOR_COCOSBUILDER)
-include(editor-support/cocosbuilder/CMakeLists.txt)
-set(COCOS_EDITOR_SUPPORT_SRC ${COCOS_EDITOR_SUPPORT_SRC} ${COCOS_CCB_SRC})
-endif(BUILD_EDITOR_COCOSBUILDER)
-
-if(BUILD_EDITOR_COCOSTUDIO)
-include(editor-support/cocostudio/CMakeLists.txt)
-set(COCOS_EDITOR_SUPPORT_SRC ${COCOS_EDITOR_SUPPORT_SRC} ${COCOS_CS_SRC})
-endif(BUILD_EDITOR_COCOSTUDIO)
-
-if(BUILD_EDITOR_SPINE)
-include(editor-support/spine/CMakeLists.txt)
-set(COCOS_EDITOR_SUPPORT_SRC ${COCOS_EDITOR_SUPPORT_SRC} ${COCOS_SPINE_SRC})
-endif(BUILD_EDITOR_SPINE)
 
 include(../extensions/CMakeLists.txt)
 
@@ -70,12 +52,8 @@ set(COCOS_SRC cocos2d.cpp
     ${COCOS_MATH_SRC}
     ${COCOS_RENDERER_SRC}
     ${COCOS_BASE_SRC}
-    ${COCOS_AUDIO_SRC}
-    ${COCOS_UI_SRC}
     ${COCOS_DEPRECATED_SRC}
     ${COCOS_NETWORK_SRC}
-    ${COCOS_EDITOR_SUPPORT_SRC}
-    ${COCOS_EXTENSIONS_SRC}
     )
 
   #todo: provide prebuild versions of the xx libs for all platforms
@@ -91,7 +69,7 @@ if(WINDOWS)
   endforeach()
   list(APPEND PLATFORM_SPECIFIC_LIBS ws2_32 winmm)
 elseif(LINUX)
-  foreach(_pkg OPENGL GLEW GLFW3 FMODEX FONTCONFIG THREADS)
+  foreach(_pkg OPENGL GLEW GLFW3 FONTCONFIG THREADS)
     cocos_use_pkg(cocos2d ${_pkg})
   endforeach()
 elseif(MACOSX OR APPLE)
