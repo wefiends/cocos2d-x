@@ -331,7 +331,6 @@ void GLView::handleTouchesMove(int num, intptr_t ids[], float xs[], float ys[])
         auto iter = g_touchIdReorderMap.find(id);
         if (iter == g_touchIdReorderMap.end())
         {
-            CCLOG("if the index doesn't exist, it is an error");
             continue;
         }
 
@@ -379,7 +378,6 @@ void GLView::handleTouchesOfEndOrCancel(EventTouch::EventCode eventCode, int num
         auto iter = g_touchIdReorderMap.find(id);
         if (iter == g_touchIdReorderMap.end())
         {
-            CCLOG("if the index doesn't exist, it is an error");
             continue;
         }
         
@@ -408,7 +406,6 @@ void GLView::handleTouchesOfEndOrCancel(EventTouch::EventCode eventCode, int num
 
     if (touchEvent._touches.size() == 0)
     {
-        CCLOG("touchesEnded or touchesCancel: size = 0");
         return;
     }
     
