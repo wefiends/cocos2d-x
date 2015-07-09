@@ -353,7 +353,7 @@ void GLView::handleTouchesMove(int num, intptr_t ids[], float xs[], float ys[])
 
     if (touchEvent._touches.size() == 0)
     {
-        CCLOG("touchesMoved: size = 0");
+        //CCLOG("touchesMoved: size = 0");
         return;
     }
     
