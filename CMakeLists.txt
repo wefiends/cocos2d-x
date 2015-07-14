@@ -286,13 +286,6 @@ endif()
 
 cocos_find_package(PNG PNG REQUIRED)
 cocos_find_package(TIFF TIFF REQUIRED)
-cocos_find_package(WEBSOCKETS WEBSOCKETS REQUIRED)
-cocos_find_package(CURL CURL REQUIRED)
-
-add_subdirectory(external/flatbuffers)
-set(FLATBUFFERS_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/external)
-message(STATUS "Flatbuffers include dirs: ${FLATBUFFERS_INCLUDE_DIRS}")
-
 
 # build xxhash
 add_subdirectory(external/xxhash)

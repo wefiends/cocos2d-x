@@ -39,10 +39,7 @@ include(math/CMakeLists.txt)
 include(renderer/CMakeLists.txt)
 include(base/CMakeLists.txt)
 include(deprecated/CMakeLists.txt)
-include(network/CMakeLists.txt)
 include(storage/CMakeLists.txt)
-
-include(../extensions/CMakeLists.txt)
 
 set(COCOS_SRC cocos2d.cpp
     ${COCOS_2D_SRC}
@@ -53,7 +50,6 @@ set(COCOS_SRC cocos2d.cpp
     ${COCOS_RENDERER_SRC}
     ${COCOS_BASE_SRC}
     ${COCOS_DEPRECATED_SRC}
-    ${COCOS_NETWORK_SRC}
     )
 
   #todo: provide prebuild versions of the xx libs for all platforms
@@ -103,7 +99,7 @@ else()
   message( FATAL_ERROR "Unsupported platform, CMake will exit" )
 endif()
 
-foreach(pkg ZLIB MINIZIP JPEG PNG TIFF TinyXML2 FREETYPE WEBSOCKETS CURL FLATBUFFERS XXHASH)
+foreach(pkg ZLIB MINIZIP JPEG PNG TIFF TinyXML2 FREETYPE XXHASH)
   cocos_use_pkg(cocos2d ${pkg})
 endforeach()
 
