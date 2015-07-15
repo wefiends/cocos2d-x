@@ -376,7 +376,7 @@ Node* CSLoader::loadNodeWithContent(const std::string& content)
     doc.Parse<0>(content.c_str());
     if (doc.HasParseError())
     {
-        CCLOG("GetParseError %s\n", doc.GetParseError());
+        CCLOG("GetParseError %d\n", doc.GetParseError());
     }
     
     // cocos2dx version mono editor is based on
@@ -611,7 +611,7 @@ Node* CSLoader::loadSprite(const rapidjson::Value& json)
         
         if(!sprite)
         {
-            sprite = CCSprite::create();
+            sprite = Sprite::create();
             CCLOG("filePath is empty. Create a sprite with no texture");
         }
     }
@@ -724,7 +724,7 @@ Node* CSLoader::loadWidget(const rapidjson::Value& json)
             customJsonDict.Parse<0>(customProperty);
             if (customJsonDict.HasParseError())
             {
-                CCLOG("GetParseError %s\n", customJsonDict.GetParseError());
+                CCLOG("GetParseError %d\n", customJsonDict.GetParseError());
             }
             
             widgetPropertiesReader->setPropsForAllCustomWidgetFromJsonDictionary(classname, widget, customJsonDict);
@@ -844,7 +844,7 @@ Node* CSLoader::nodeWithFlatBuffersFile(const std::string &fileName, const ccNod
     if (csBuildId)
     {
         CCASSERT(strcmp(_csBuildID.c_str(), csBuildId->c_str()) == 0,
-                 String::createWithFormat("%s%s%s%s%s%s%s%s%s%s",
+                 StringUtils::format("%s%s%s%s%s%s%s%s%s%s",
                                           "The reader build id of your Cocos exported file(",
                                           csBuildId->c_str(),
                                           ") and the reader build id in your Cocos2d-x(",
@@ -854,7 +854,7 @@ Node* CSLoader::nodeWithFlatBuffersFile(const std::string &fileName, const ccNod
                                           csBuildId->c_str(),
                                           ")from ",
                                           "http://www.cocos2d-x.org/filedown/cocos-reader",
-                                          " and replace it in your Cocos2d-x")->getCString());
+                                          " and replace it in your Cocos2d-x").c_str());
     }
     
     // decode plist

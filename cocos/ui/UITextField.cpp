@@ -26,6 +26,7 @@ THE SOFTWARE.
 #include "platform/CCFileUtils.h"
 #include "ui/UIHelper.h"
 #include "base/ccUTF8.h"
+#include "2d/CCCamera.h"
 
 NS_CC_BEGIN
 
@@ -380,26 +381,17 @@ void TextField::setTouchAreaEnabled(bool enable)
     _useTouchArea = enable;
 }
     
-bool TextField::hitTest(const Vec2 &pt)
+bool TextField::hitTest(const Vec2 &pt, const Camera* camera, Vec3 *p) const
 {
-    if (_useTouchArea)
+    if (false == _useTouchArea)
     {
-        Vec2 nsp = convertToNodeSpace(pt);
-        Rect bb = Rect(-_touchWidth * _anchorPoint.x, -_touchHeight * _anchorPoint.y, _touchWidth, _touchHeight);
-        if (nsp.x >= bb.origin.x && nsp.x <= bb.origin.x + bb.size.width
-            && nsp.y >= bb.origin.y && nsp.y <= bb.origin.y + bb.size.height)
-        {
-            return true;
-        }
+        return Widget::hitTest(pt, camera, nullptr);
     }
-    else
-    {
-        return Widget::hitTest(pt);
-    }
-    
-    return false;
+
+    Rect rect(0, 0, _touchWidth, _touchHeight);
+    return isScreenPointInRect(pt, camera, getWorldToNodeTransform(), rect, nullptr);
 }
-    
+
 Size TextField::getTouchSize()const
 {
     return Size(_touchWidth, _touchHeight);
@@ -461,7 +453,12 @@ void TextField::setPlaceHolderColor(const cocos2d::Color4B &color)
 {
     _textFieldRenderer->setColorSpaceHolder(color);
 }
-    
+
+const Color4B& TextField::getTextColor()const
+{
+    return _textFieldRenderer->getTextColor();
+}
+
 void TextField::setTextColor(const cocos2d::Color4B &textColor)
 {
     _textFieldRenderer->setTextColor(textColor);
@@ -844,9 +841,19 @@ void TextField::setTextHorizontalAlignment(TextHAlignment alignment)
     _textFieldRenderer->setHorizontalAlignment(alignment);
 }
 
+TextHAlignment TextField::getTextHorizontalAlignment() const
+{
+    return _textFieldRenderer->getHorizontalAlignment();
+}
+
 void TextField::setTextVerticalAlignment(TextVAlignment alignment)
 {
     _textFieldRenderer->setVerticalAlignment(alignment);
+}
+
+TextVAlignment TextField::getTextVerticalAlignment() const
+{
+    return _textFieldRenderer->getVerticalAlignment();
 }
 
 }

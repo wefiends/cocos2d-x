@@ -440,15 +440,15 @@ namespace cocostudio
             {
                 label->setFontName(path);
             }
-            else
-            {
-                auto alert = Label::create();
-                alert->setString(__String::createWithFormat("%s missed", errorFilePath.c_str())->getCString());
-                label->addChild(alert);
-            }
+            //else
+            //{
+            //    auto alert = Label::create();
+            //    alert->setString(__String::createWithFormat("%s missed", errorFilePath.c_str())->getCString());
+            //    label->addChild(alert);
+            //}
         }
         
-        bool outlineEnabled = options->outlineEnabled();
+        bool outlineEnabled = options->outlineEnabled() != 0;
         if (outlineEnabled)
         {
             auto f_outlineColor = options->outlineColor();
@@ -459,7 +459,7 @@ namespace cocostudio
             }
         }
         
-        bool shadowEnabled = options->shadowEnabled();
+        bool shadowEnabled = options->shadowEnabled() != 0;
         if (shadowEnabled)
         {
             auto f_shadowColor = options->shadowColor();

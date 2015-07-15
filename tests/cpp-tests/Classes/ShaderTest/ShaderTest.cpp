@@ -129,6 +129,7 @@ void ShaderNode::onDraw(const Mat4 &transform, uint32_t flags)
 
     auto glProgramState = getGLProgramState();
     glProgramState->setVertexAttribPointer("a_position", 2, GL_FLOAT, GL_FALSE, 0, vertices);
+
     glProgramState->apply(transform);
 
     glDrawArrays(GL_TRIANGLES, 0, 6);
@@ -181,7 +182,7 @@ bool ShaderMandelbrot::init()
 {
     if (ShaderTestDemo::init())
     {
-#if CC_TARGET_PLATFORM != CC_PLATFORM_WINRT && CC_TARGET_PLATFORM != CC_PLATFORM_WP8
+#if (CC_TARGET_PLATFORM != CC_PLATFORM_WINRT)
         auto sn = ShaderNode::shaderNodeWithVertex("", "Shaders/example_Mandelbrot.fsh");
 
         auto s = Director::getInstance()->getWinSize();
@@ -215,7 +216,7 @@ bool ShaderJulia::init()
 {
     if (ShaderTestDemo::init())
     {
-#if CC_TARGET_PLATFORM != CC_PLATFORM_WINRT && CC_TARGET_PLATFORM != CC_PLATFORM_WP8
+#if (CC_TARGET_PLATFORM != CC_PLATFORM_WINRT)
         auto sn = ShaderNode::shaderNodeWithVertex("", "Shaders/example_Julia.fsh");
 
         auto s = Director::getInstance()->getWinSize();
@@ -400,8 +401,8 @@ bool SpriteBlur::initWithTexture(Texture2D* texture, const Rect& rect)
 
 void SpriteBlur::initGLProgram()
 {
-    GLchar * fragSource = (GLchar*) String::createWithContentsOfFile(
-                                FileUtils::getInstance()->fullPathForFilename("Shaders/example_Blur.fsh").c_str())->getCString();  
+    GLchar * fragSource = (GLchar*) FileUtils::getInstance()->getStringFromFile(
+                                FileUtils::getInstance()->fullPathForFilename("Shaders/example_Blur.fsh")).c_str();
     auto program = GLProgram::createWithByteArrays(ccPositionTextureColor_noMVP_vert, fragSource);
 
     auto glProgramState = GLProgramState::getOrCreateWithGLProgram(program);
@@ -486,7 +487,7 @@ bool ShaderBlur::init()
 {
     if( ShaderTestDemo::init() ) 
     {
-#if CC_TARGET_PLATFORM != CC_PLATFORM_WINRT && CC_TARGET_PLATFORM != CC_PLATFORM_WP8
+#if (CC_TARGET_PLATFORM != CC_PLATFORM_WINRT)
         _blurSprite = SpriteBlur::create("Images/grossini.png");
         auto sprite = Sprite::create("Images/grossini.png");
         auto s = Director::getInstance()->getWinSize();
@@ -529,7 +530,7 @@ bool ShaderRetroEffect::init()
 {
     if( ShaderTestDemo::init() ) {
 
-        GLchar * fragSource = (GLchar*) String::createWithContentsOfFile(FileUtils::getInstance()->fullPathForFilename("Shaders/example_HorizontalColor.fsh"))->getCString();
+        GLchar * fragSource = (GLchar*) FileUtils::getInstance()->getStringFromFile(FileUtils::getInstance()->fullPathForFilename("Shaders/example_HorizontalColor.fsh")).c_str();
         auto p = GLProgram::createWithByteArrays(ccPositionTexture_vert, fragSource);
 
         auto director = Director::getInstance();

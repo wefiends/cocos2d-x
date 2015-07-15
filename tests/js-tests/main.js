@@ -96,6 +96,7 @@ cc.game.onStart = function(){
         searchPaths.push('script');
         searchPaths.push('src');
         var paths = [
+            'res/resjs',
             'res',
             'res/scenetest',
             'res/scenetest/ArmatureComponentTest',
@@ -114,6 +115,11 @@ cc.game.onStart = function(){
         }
         jsb.fileUtils.setSearchPaths(searchPaths);
     }
+    else
+    {
+        cc.loader.resPath = '../cpp-tests/Resources'
+    }
+
     cc.LoaderScene.preload(g_resources, function () {
         if(window.sideIndexBar && typeof sideIndexBar.start === 'function'){
             sideIndexBar.start();
