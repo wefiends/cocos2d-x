@@ -255,14 +255,13 @@ THE SOFTWARE.
 /** Use 3d physics integration API. */
 #ifndef CC_USE_3D_PHYSICS
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_MAC || CC_TARGET_PLATFORM == CC_PLATFORM_WIN32 || CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_LINUX || CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-#define CC_USE_3D_PHYSICS 1
-#define CC_USE_3D_PHYSICS 1
+#define CC_USE_3D_PHYSICS 0
 #endif
 #endif
 
 /** Use 3D navigation API */
 #ifndef CC_USE_NAVMESH
-#define CC_USE_NAVMESH 1
+#define CC_USE_NAVMESH 0
 #endif
 
 /** Use culling or not. */
@@ -292,7 +291,7 @@ THE SOFTWARE.
  */
 #ifndef CC_USE_WEBP
 #if (CC_TARGET_PLATFORM != CC_PLATFORM_WINRT)
-#define CC_USE_WEBP  1
+//#define CC_USE_WEBP  1
 #endif
 #endif // CC_USE_WEBP
 
@@ -326,7 +325,7 @@ THE SOFTWARE.
  * as specified by CC_ALLOCATOR_GLOBAL below.
  */
 #ifndef CC_ENABLE_ALLOCATOR
-# define CC_ENABLE_ALLOCATOR 0
+#define CC_ENABLE_ALLOCATOR 0
 #endif
 
 /** @def CC_ENABLE_ALLOCATOR_DIAGNOSTICS
@@ -349,14 +348,14 @@ THE SOFTWARE.
  * Specify allocator to use for global allocator.
  */
 #ifndef CC_ALLOCATOR_GLOBAL
-# define CC_ALLOCATOR_GLOBAL cocos2d::allocator::AllocatorStrategyDefault
+#define CC_ALLOCATOR_GLOBAL cocos2d::allocator::AllocatorStrategyDefault
 #endif
 
 /** @def CC_ALLOCATOR_GLOBAL_NEW_DELETE
  * Specify allocator to use when overriding of new and delete.
  */
 #ifndef CC_ALLOCATOR_GLOBAL_NEW_DELETE
-# define CC_ALLOCATOR_GLOBAL_NEW_DELETE cocos2d::allocator::AllocatorStrategyGlobalSmallBlock
+#define CC_ALLOCATOR_GLOBAL_NEW_DELETE cocos2d::allocator::AllocatorStrategyGlobalSmallBlock
 #endif
 
 #endif // __CCCONFIG_H__
