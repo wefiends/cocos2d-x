@@ -329,6 +329,12 @@ void FrameBuffer::clearAllFBOs()
         fbo->clearFBO();
     }
 }
+    
+void FrameBuffer::clearDefaultFBO()
+{
+    _defaultFBO->_isDefault = false;
+    _defaultFBO = nullptr;
+}
 
 FrameBuffer* FrameBuffer::create(uint8_t fid, unsigned int width, unsigned int height)
 {

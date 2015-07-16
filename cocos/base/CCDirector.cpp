@@ -184,7 +184,9 @@ Director::~Director(void)
     CC_SAFE_RELEASE(_notificationNode);
     CC_SAFE_RELEASE(_scheduler);
     CC_SAFE_RELEASE(_actionManager);
+    experimental::FrameBuffer::clearDefaultFBO();
     CC_SAFE_DELETE(_defaultFBO);
+    
     
     delete _eventAfterUpdate;
     delete _eventAfterDraw;
