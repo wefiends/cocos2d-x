@@ -197,6 +197,7 @@ public:
     static FrameBuffer* getOrCreateDefaultFBO(GLView* glView);
     static void applyDefaultFBO();
     static void clearAllFBOs();
+    static void clearDefaultFBO();
 private:
     //static GLuint _defaultFBO;
     static FrameBuffer* _defaultFBO;
