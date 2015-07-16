@@ -703,6 +703,7 @@ void Label::alignText()
             if (batchNode)
             {
                 _blendFunc = batchNode->getBlendFunc();
+                _isOpacityModifyRGB = batchNode->getTexture()->hasPremultipliedAlpha();
                 batchNode->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
                 batchNode->setPosition(Vec2::ZERO);
                 _batchNodes.pushBack(batchNode);
