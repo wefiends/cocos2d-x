@@ -705,10 +705,14 @@ getCurrentFocusedWidget : function (
 /**
  * @method hitTest
  * @param {vec2_object} arg0
+ * @param {cc.Camera} arg1
+ * @param {vec3_object} arg2
  * @return {bool}
  */
 hitTest : function (
-vec2 
+vec2, 
+camera, 
+vec3 
 )
 {
     return false;
@@ -1497,6 +1501,18 @@ getCapInsetsNormalRenderer : function (
 },
 
 /**
+ * @method setTitleAlignment
+* @param {cc.TextHAlignment|cc.TextHAlignment} texthalignment
+* @param {cc.TextVAlignment} textvalignment
+*/
+setTitleAlignment : function(
+texthalignment,
+textvalignment 
+)
+{
+},
+
+/**
  * @method getCapInsetsPressedRenderer
  * @return {rect_object}
  */
@@ -1644,9 +1660,9 @@ Button : function (
 };
 
 /**
- * @class CheckBox
+ * @class AbstractCheckButton
  */
-ccui.CheckBox = {
+ccui.AbstractCheckButton = {
 
 /**
  * @method loadTextureBackGroundSelected
@@ -1790,6 +1806,13 @@ texturerestype
 {
 },
 
+};
+
+/**
+ * @class CheckBox
+ */
+ccui.CheckBox = {
+
 /**
  * @method create
 * @param {String|String} str
@@ -1827,6 +1850,162 @@ createInstance : function (
  * @constructor
  */
 CheckBox : function (
+)
+{
+},
+
+};
+
+/**
+ * @class RadioButton
+ */
+ccui.RadioButton = {
+
+/**
+ * @method create
+* @param {String|String} str
+* @param {String|String} str
+* @param {String|ccui.Widget::TextureResType} str
+* @param {String} str
+* @param {String} str
+* @param {ccui.Widget::TextureResType} texturerestype
+* @return {ccui.RadioButton|ccui.RadioButton|ccui.RadioButton}
+*/
+create : function(
+str,
+str,
+str,
+str,
+str,
+texturerestype 
+)
+{
+    return ccui.RadioButton;
+},
+
+/**
+ * @method createInstance
+ * @return {cc.Ref}
+ */
+createInstance : function (
+)
+{
+    return cc.Ref;
+},
+
+/**
+ * @method RadioButton
+ * @constructor
+ */
+RadioButton : function (
+)
+{
+},
+
+};
+
+/**
+ * @class RadioButtonGroup
+ */
+ccui.RadioButtonGroup = {
+
+/**
+ * @method removeRadioButton
+ * @param {ccui.RadioButton} arg0
+ */
+removeRadioButton : function (
+radiobutton 
+)
+{
+},
+
+/**
+ * @method isAllowedNoSelection
+ * @return {bool}
+ */
+isAllowedNoSelection : function (
+)
+{
+    return false;
+},
+
+/**
+ * @method getSelectedButtonIndex
+ * @return {int}
+ */
+getSelectedButtonIndex : function (
+)
+{
+    return 0;
+},
+
+/**
+ * @method setAllowedNoSelection
+ * @param {bool} arg0
+ */
+setAllowedNoSelection : function (
+bool 
+)
+{
+},
+
+/**
+ * @method getRadioButtonByIndex
+ * @param {int} arg0
+ * @return {ccui.RadioButton}
+ */
+getRadioButtonByIndex : function (
+int 
+)
+{
+    return ccui.RadioButton;
+},
+
+/**
+ * @method getNumberOfRadioButtons
+ * @return {long}
+ */
+getNumberOfRadioButtons : function (
+)
+{
+    return 0;
+},
+
+/**
+ * @method addRadioButton
+ * @param {ccui.RadioButton} arg0
+ */
+addRadioButton : function (
+radiobutton 
+)
+{
+},
+
+/**
+ * @method setSelectedButton
+* @param {ccui.RadioButton|int} radiobutton
+*/
+setSelectedButton : function(
+int 
+)
+{
+},
+
+/**
+ * @method create
+ * @return {ccui.RadioButtonGroup}
+ */
+create : function (
+)
+{
+    return ccui.RadioButtonGroup;
+},
+
+/**
+ * @method RadioButtonGroup
+ * @constructor
+ */
+RadioButtonGroup : function (
 )
 {
 },
@@ -1964,7 +2143,7 @@ enableShadow : function (
 
 /**
  * @method getFontSize
- * @return {int}
+ * @return {float}
  */
 getFontSize : function (
 )
@@ -2046,13 +2225,13 @@ str
  * @method init
  * @param {String} arg0
  * @param {String} arg1
- * @param {int} arg2
+ * @param {float} arg2
  * @return {bool}
  */
 init : function (
 str, 
 str, 
-int 
+float 
 )
 {
     return false;
@@ -2090,7 +2269,7 @@ size
 
 /**
  * @method getStringLength
- * @return {int}
+ * @return {long}
  */
 getStringLength : function (
 )
@@ -2142,10 +2321,10 @@ getTextHorizontalAlignment : function (
 
 /**
  * @method setFontSize
- * @param {int} arg0
+ * @param {float} arg0
  */
 setFontSize : function (
-int 
+float 
 )
 {
 },
@@ -2204,13 +2383,13 @@ texthalignment
  * @method create
 * @param {String} str
 * @param {String} str
-* @param {int} int
+* @param {float} float
 * @return {ccui.Text|ccui.Text}
 */
 create : function(
 str,
 str,
-int 
+float 
 )
 {
     return ccui.Text;
@@ -2244,7 +2423,7 @@ ccui.TextAtlas = {
 
 /**
  * @method getStringLength
- * @return {int}
+ * @return {long}
  */
 getStringLength : function (
 )
@@ -2505,6 +2684,26 @@ bool
 },
 
 /**
+ * @method setScrollBarOpacity
+ * @param {unsigned char} arg0
+ */
+setScrollBarOpacity : function (
+char 
+)
+{
+},
+
+/**
+ * @method setScrollBarEnabled
+ * @param {bool} arg0
+ */
+setScrollBarEnabled : function (
+bool 
+)
+{
+},
+
+/**
  * @method isInertiaScrollEnabled
  * @return {bool}
  */
@@ -2539,6 +2738,16 @@ getDirection : function (
 },
 
 /**
+ * @method setScrollBarColor
+ * @param {color3b_object} arg0
+ */
+setScrollBarColor : function (
+color3b 
+)
+{
+},
+
+/**
  * @method scrollToBottomLeft
  * @param {float} arg0
  * @param {bool} arg1
@@ -2564,6 +2773,16 @@ getInnerContainer : function (
  * @method jumpToBottom
  */
 jumpToBottom : function (
+)
+{
+},
+
+/**
+ * @method setInnerContainerPosition
+ * @param {vec2_object} arg0
+ */
+setInnerContainerPosition : function (
+vec2 
 )
 {
 },
@@ -2617,6 +2836,16 @@ size
 },
 
 /**
+ * @method getInnerContainerPosition
+ * @return {vec2_object}
+ */
+getInnerContainerPosition : function (
+)
+{
+    return cc.Vec2;
+},
+
+/**
  * @method getInnerContainerSize
  * @return {size_object}
  */
@@ -2647,6 +2876,26 @@ float
 },
 
 /**
+ * @method setScrollBarAutoHideTime
+ * @param {float} arg0
+ */
+setScrollBarAutoHideTime : function (
+float 
+)
+{
+},
+
+/**
+ * @method setScrollBarPositionFromCornerForHorizontal
+ * @param {vec2_object} arg0
+ */
+setScrollBarPositionFromCornerForHorizontal : function (
+vec2 
+)
+{
+},
+
+/**
  * @method setInertiaScrollEnabled
  * @param {bool} arg0
  */
@@ -2654,6 +2903,26 @@ setInertiaScrollEnabled : function (
 bool 
 )
 {
+},
+
+/**
+ * @method setScrollBarAutoHideEnabled
+ * @param {bool} arg0
+ */
+setScrollBarAutoHideEnabled : function (
+bool 
+)
+{
+},
+
+/**
+ * @method getScrollBarColor
+ * @return {color3b_object}
+ */
+getScrollBarColor : function (
+)
+{
+    return cc.Color3B;
 },
 
 /**
@@ -2678,6 +2947,26 @@ float
  * @method jumpToBottomRight
  */
 jumpToBottomRight : function (
+)
+{
+},
+
+/**
+ * @method getScrollBarPositionFromCornerForHorizontal
+ * @return {vec2_object}
+ */
+getScrollBarPositionFromCornerForHorizontal : function (
+)
+{
+    return cc.Vec2;
+},
+
+/**
+ * @method setScrollBarWidth
+ * @param {float} arg0
+ */
+setScrollBarWidth : function (
+float 
 )
 {
 },
@@ -2723,6 +3012,16 @@ vec2
 },
 
 /**
+ * @method getScrollBarPositionFromCornerForVertical
+ * @return {vec2_object}
+ */
+getScrollBarPositionFromCornerForVertical : function (
+)
+{
+    return cc.Vec2;
+},
+
+/**
  * @method scrollToPercentVertical
  * @param {float} arg0
  * @param {float} arg1
@@ -2749,6 +3048,16 @@ bool
 },
 
 /**
+ * @method getScrollBarOpacity
+ * @return {unsigned char}
+ */
+getScrollBarOpacity : function (
+)
+{
+    return 0;
+},
+
+/**
  * @method scrollToBottomRight
  * @param {float} arg0
  * @param {bool} arg1
@@ -2758,6 +3067,36 @@ float,
 bool 
 )
 {
+},
+
+/**
+ * @method setScrollBarPositionFromCorner
+ * @param {vec2_object} arg0
+ */
+setScrollBarPositionFromCorner : function (
+vec2 
+)
+{
+},
+
+/**
+ * @method setScrollBarPositionFromCornerForVertical
+ * @param {vec2_object} arg0
+ */
+setScrollBarPositionFromCornerForVertical : function (
+vec2 
+)
+{
+},
+
+/**
+ * @method getScrollBarAutoHideTime
+ * @return {float}
+ */
+getScrollBarAutoHideTime : function (
+)
+{
+    return 0;
 },
 
 /**
@@ -2778,6 +3117,36 @@ float,
 bool 
 )
 {
+},
+
+/**
+ * @method isScrollBarEnabled
+ * @return {bool}
+ */
+isScrollBarEnabled : function (
+)
+{
+    return false;
+},
+
+/**
+ * @method getScrollBarWidth
+ * @return {float}
+ */
+getScrollBarWidth : function (
+)
+{
+    return 0;
+},
+
+/**
+ * @method isScrollBarAutoHideEnabled
+ * @return {bool}
+ */
+isScrollBarAutoHideEnabled : function (
+)
+{
+    return false;
 },
 
 /**
@@ -2839,7 +3208,7 @@ ccui.ListView = {
 /**
  * @method getIndex
  * @param {ccui.Widget} arg0
- * @return {int}
+ * @return {long}
  */
 getIndex : function (
 widget 
@@ -2888,17 +3257,17 @@ getItems : function (
 
 /**
  * @method removeItem
- * @param {int} arg0
+ * @param {long} arg0
  */
 removeItem : function (
-int 
+long 
 )
 {
 },
 
 /**
  * @method getCurSelectedIndex
- * @return {int}
+ * @return {long}
  */
 getCurSelectedIndex : function (
 )
@@ -2908,10 +3277,10 @@ getCurSelectedIndex : function (
 
 /**
  * @method insertDefaultItem
- * @param {int} arg0
+ * @param {long} arg0
  */
 insertDefaultItem : function (
-int 
+long 
 )
 {
 },
@@ -2962,11 +3331,11 @@ getItemsMargin : function (
 
 /**
  * @method getItem
- * @param {int} arg0
+ * @param {long} arg0
  * @return {ccui.Widget}
  */
 getItem : function (
-int 
+long 
 )
 {
     return ccui.Widget;
@@ -3001,11 +3370,11 @@ pushBackDefaultItem : function (
 /**
  * @method insertCustomItem
  * @param {ccui.Widget} arg0
- * @param {int} arg1
+ * @param {long} arg1
  */
 insertCustomItem : function (
 widget, 
-int 
+long 
 )
 {
 },
@@ -3047,6 +3416,16 @@ ListView : function (
 ccui.Slider = {
 
 /**
+ * @method setMaxPercent
+ * @param {int} arg0
+ */
+setMaxPercent : function (
+int 
+)
+{
+},
+
+/**
  * @method setPercent
  * @param {int} arg0
  */
@@ -3066,6 +3445,16 @@ str,
 texturerestype 
 )
 {
+},
+
+/**
+ * @method getMaxPercent
+ * @return {int}
+ */
+getMaxPercent : function (
+)
+{
+    return 0;
 },
 
 /**
@@ -3619,6 +4008,16 @@ getDeleteBackward : function (
 },
 
 /**
+ * @method getTextColor
+ * @return {color4b_object}
+ */
+getTextColor : function (
+)
+{
+    return cc.Color4B;
+},
+
+/**
  * @method getPlaceHolder
  * @return {String}
  */
@@ -3815,6 +4214,16 @@ bool
 },
 
 /**
+ * @method getTextHorizontalAlignment
+ * @return {cc.TextHAlignment}
+ */
+getTextHorizontalAlignment : function (
+)
+{
+    return 0;
+},
+
+/**
  * @method setFontSize
  * @param {int} arg0
  */
@@ -3892,6 +4301,16 @@ setDetachWithIME : function (
 bool 
 )
 {
+},
+
+/**
+ * @method getTextVerticalAlignment
+ * @return {cc.TextVAlignment}
+ */
+getTextVerticalAlignment : function (
+)
+{
+    return 0;
 },
 
 /**
@@ -3988,7 +4407,7 @@ str
 
 /**
  * @method getStringLength
- * @return {int}
+ * @return {long}
  */
 getStringLength : function (
 )
@@ -4068,7 +4487,7 @@ getCustomScrollThreshold : function (
 
 /**
  * @method getCurPageIndex
- * @return {int}
+ * @return {long}
  */
 getCurPageIndex : function (
 )
@@ -4077,14 +4496,24 @@ getCurPageIndex : function (
 },
 
 /**
+ * @method setDirection
+ * @param {ccui.PageView::Direction} arg0
+ */
+setDirection : function (
+direction 
+)
+{
+},
+
+/**
  * @method addWidgetToPage
  * @param {ccui.Widget} arg0
- * @param {int} arg1
+ * @param {long} arg1
  * @param {bool} arg2
  */
 addWidgetToPage : function (
 widget, 
-int, 
+long, 
 bool 
 )
 {
@@ -4101,15 +4530,13 @@ isUsingCustomScrollThreshold : function (
 },
 
 /**
- * @method getPage
- * @param {int} arg0
- * @return {ccui.Layout}
+ * @method setCurPageIndex
+ * @param {long} arg0
  */
-getPage : function (
-int 
+setCurPageIndex : function (
+long 
 )
 {
-    return ccui.Layout;
 },
 
 /**
@@ -4155,21 +4582,43 @@ int
 },
 
 /**
+ * @method getDirection
+ * @return {ccui.PageView::Direction}
+ */
+getDirection : function (
+)
+{
+    return 0;
+},
+
+/**
  * @method scrollToPage
- * @param {int} arg0
+ * @param {long} arg0
  */
 scrollToPage : function (
-int 
+long 
 )
 {
 },
 
 /**
+ * @method getPage
+ * @param {long} arg0
+ * @return {ccui.Layout}
+ */
+getPage : function (
+long 
+)
+{
+    return ccui.Layout;
+},
+
+/**
  * @method removePageAtIndex
- * @param {int} arg0
+ * @param {long} arg0
  */
 removePageAtIndex : function (
-int 
+long 
 )
 {
 },
@@ -4252,6 +4701,18 @@ long
 )
 {
     return ;
+},
+
+/**
+ * @method convertBoundingBoxToScreen
+ * @param {cc.Node} arg0
+ * @return {rect_object}
+ */
+convertBoundingBoxToScreen : function (
+node 
+)
+{
+    return cc.Rect;
 },
 
 /**
@@ -4817,6 +5278,16 @@ rect
 disableCascadeOpacity : function (
 )
 {
+},
+
+/**
+ * @method getState
+ * @return {ccui.Scale9Sprite::State}
+ */
+getState : function (
+)
+{
+    return 0;
 },
 
 /**
@@ -5886,6 +6357,130 @@ node
  * @constructor
  */
 LayoutComponent : function (
+)
+{
+},
+
+};
+
+/**
+ * @class ScrollViewBar
+ */
+ccui.ScrollViewBar = {
+
+/**
+ * @method setAutoHideEnabled
+ * @param {bool} arg0
+ */
+setAutoHideEnabled : function (
+bool 
+)
+{
+},
+
+/**
+ * @method onScrolled
+ * @param {vec2_object} arg0
+ */
+onScrolled : function (
+vec2 
+)
+{
+},
+
+/**
+ * @method isAutoHideEnabled
+ * @return {bool}
+ */
+isAutoHideEnabled : function (
+)
+{
+    return false;
+},
+
+/**
+ * @method setAutoHideTime
+ * @param {float} arg0
+ */
+setAutoHideTime : function (
+float 
+)
+{
+},
+
+/**
+ * @method getWidth
+ * @return {float}
+ */
+getWidth : function (
+)
+{
+    return 0;
+},
+
+/**
+ * @method getPositionFromCorner
+ * @return {vec2_object}
+ */
+getPositionFromCorner : function (
+)
+{
+    return cc.Vec2;
+},
+
+/**
+ * @method setPositionFromCorner
+ * @param {vec2_object} arg0
+ */
+setPositionFromCorner : function (
+vec2 
+)
+{
+},
+
+/**
+ * @method getAutoHideTime
+ * @return {float}
+ */
+getAutoHideTime : function (
+)
+{
+    return 0;
+},
+
+/**
+ * @method setWidth
+ * @param {float} arg0
+ */
+setWidth : function (
+float 
+)
+{
+},
+
+/**
+ * @method create
+ * @param {ccui.ScrollView} arg0
+ * @param {ccui.ScrollView::Direction} arg1
+ * @return {ccui.ScrollViewBar}
+ */
+create : function (
+scrollview, 
+direction 
+)
+{
+    return ccui.ScrollViewBar;
+},
+
+/**
+ * @method ScrollViewBar
+ * @constructor
+ * @param {ccui.ScrollView} arg0
+ * @param {ccui.ScrollView::Direction} arg1
+ */
+ScrollViewBar : function (
+scrollview, 
+direction 
 )
 {
 },

@@ -37,6 +37,7 @@ THE SOFTWARE.
 #include "renderer/CCTexture2D.h"
 #include "renderer/CCRenderer.h"
 #include "base/CCDirector.h"
+#include "2d/CCCamera.h"
 
 #include "deprecated/CCString.h"
 
@@ -265,7 +266,6 @@ bool Sprite::initWithTexture(Texture2D *texture, const Rect& rect, bool rotated)
         setTexture(texture);
         setTextureRect(rect, rotated, rect.size);
         
-        _polyInfo.setQuad(&_quad);
         // by default use "Self Render".
         // if the sprite is added to a batchnode, then it will automatically switch to "batchnode Render"
         setBatchNode(nullptr);
@@ -282,6 +282,7 @@ bool Sprite::initWithTexture(Texture2D *texture, const Rect& rect, bool rotated)
 
 Sprite::Sprite(void)
 : _batchNode(nullptr)
+, _textureAtlas(nullptr)
 , _shouldBeHidden(false)
 , _texture(nullptr)
 , _spriteFrame(nullptr)
@@ -424,10 +425,16 @@ void Sprite::setTextureRect(const Rect& rect, bool rotated, const Size& untrimme
         _quad.tl.vertices.set(x1, y2, 0.0f);
         _quad.tr.vertices.set(x2, y2, 0.0f);
     }
+    
+    _polyInfo.setQuad(&_quad);
 }
 
 void Sprite::debugDraw(bool on)
 {
+    if (_batchNode) {
+        log("Sprite doesn't support debug draw when using SpriteBatchNode");
+        return ;
+    }
     DrawNode* draw = getChildByName<DrawNode*>("debugDraw");
     if(on)
     {
@@ -601,6 +608,16 @@ void Sprite::updateTransform(void)
 
             float x2 = x1 + size.width;
             float y2 = y1 + size.height;
+            
+            if (_flippedX)
+            {
+                std::swap(x1, x2);
+            }
+            if (_flippedY)
+            {
+                std::swap(y1, y2);
+            }
+            
             float x = _transformToBatch.m[12];
             float y = _transformToBatch.m[13];
 
@@ -653,7 +670,15 @@ void Sprite::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 {
 #if CC_USE_CULLING
     // Don't do calculate the culling if the transform was not updated
-    _insideBounds = (flags & FLAGS_TRANSFORM_DIRTY) ? renderer->checkVisibility(transform, _contentSize) : _insideBounds;
+    auto visitingCamera = Camera::getVisitingCamera();
+    auto defaultCamera = Camera::getDefaultCamera();
+    if (visitingCamera == defaultCamera) {
+        _insideBounds = ((flags & FLAGS_TRANSFORM_DIRTY)|| visitingCamera->isViewProjectionUpdated()) ? renderer->checkVisibility(transform, _contentSize) : _insideBounds;
+    }
+    else
+    {
+        _insideBounds = renderer->checkVisibility(transform, _contentSize);
+    }
 
     if(_insideBounds)
 #endif
@@ -904,7 +929,13 @@ void Sprite::setFlippedX(bool flippedX)
     if (_flippedX != flippedX)
     {
         _flippedX = flippedX;
-        setTextureRect(_rect, _rectRotated, _contentSize);
+        for (ssize_t i = 0; i < _polyInfo.triangles.vertCount; i++) {
+            auto& v = _polyInfo.triangles.verts[i].vertices;
+            v.x = _contentSize.width -v.x;
+        }
+        if (_textureAtlas) {
+            setDirty(true);
+        }
     }
 }
 
@@ -918,7 +949,13 @@ void Sprite::setFlippedY(bool flippedY)
     if (_flippedY != flippedY)
     {
         _flippedY = flippedY;
-        setTextureRect(_rect, _rectRotated, _contentSize);
+        for (ssize_t i = 0; i < _polyInfo.triangles.vertCount; i++) {
+            auto& v = _polyInfo.triangles.verts[i].vertices;
+            v.y = _contentSize.height -v.y;
+        }
+        if (_textureAtlas) {
+            setDirty(true);
+        }
     }
 }
 
@@ -943,10 +980,9 @@ void Sprite::updateColor(void)
         color4.b *= _displayedOpacity/255.0f;
     }
 
-    _quad.bl.colors = color4;
-    _quad.br.colors = color4;
-    _quad.tl.colors = color4;
-    _quad.tr.colors = color4;
+    for (ssize_t i = 0; i < _polyInfo.triangles.vertCount; i++) {
+        _polyInfo.triangles.verts[i].colors = color4;
+    }
 
     // renders using batch node
     if (_batchNode)

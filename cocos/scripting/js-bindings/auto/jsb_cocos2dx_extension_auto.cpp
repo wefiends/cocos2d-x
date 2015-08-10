@@ -338,13 +338,11 @@ bool js_cocos2dx_extension_Control_constructor(JSContext *cx, uint32_t argc, jsv
     return true;
 }
 
-
 extern JSObject *jsb_cocos2d_Layer_prototype;
 
 void js_cocos2d_extension_Control_finalize(JSFreeOp *fop, JSObject *obj) {
     CCLOGINFO("jsbindings: finalizing JS object %p (Control)", obj);
 }
-
 void js_register_cocos2dx_extension_Control(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_extension_Control_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocos2d_extension_Control_class->name = "Control";
@@ -1436,16 +1434,7 @@ bool js_cocos2dx_extension_ControlButton_constructor(JSContext *cx, uint32_t arg
     if (JS_HasProperty(cx, obj, "_ctor", &ok) && ok)
         ScriptingCore::getInstance()->executeFunctionWithOwner(OBJECT_TO_JSVAL(obj), "_ctor", args);
     return true;
-}
-
-
-extern JSObject *jsb_cocos2d_extension_Control_prototype;
-
-void js_cocos2d_extension_ControlButton_finalize(JSFreeOp *fop, JSObject *obj) {
-    CCLOGINFO("jsbindings: finalizing JS object %p (ControlButton)", obj);
-}
-
-static bool js_cocos2d_extension_ControlButton_ctor(JSContext *cx, uint32_t argc, jsval *vp)
+}static bool js_cocos2dx_extension_ControlButton_ctor(JSContext *cx, uint32_t argc, jsval *vp)
 {
     JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
     JS::RootedObject obj(cx, args.thisv().toObjectOrNull());
@@ -1461,6 +1450,13 @@ static bool js_cocos2d_extension_ControlButton_ctor(JSContext *cx, uint32_t argc
     args.rval().setUndefined();
     return true;
 }
+
+extern JSObject *jsb_cocos2d_extension_Control_prototype;
+
+void js_cocos2d_extension_ControlButton_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOGINFO("jsbindings: finalizing JS object %p (ControlButton)", obj);
+}
+    
 void js_register_cocos2dx_extension_ControlButton(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_extension_ControlButton_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocos2d_extension_ControlButton_class->name = "ControlButton";
@@ -1518,7 +1514,7 @@ void js_register_cocos2dx_extension_ControlButton(JSContext *cx, JS::HandleObjec
         JS_FN("initWithLabelAndBackgroundSprite", js_cocos2dx_extension_ControlButton_initWithLabelAndBackgroundSprite, 2, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("getZoomOnTouchDown", js_cocos2dx_extension_ControlButton_getZoomOnTouchDown, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("getTitleForState", js_cocos2dx_extension_ControlButton_getTitleForState, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
-        JS_FN("ctor", js_cocos2d_extension_ControlButton_ctor, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("ctor", js_cocos2dx_extension_ControlButton_ctor, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FS_END
     };
 
@@ -1850,13 +1846,11 @@ bool js_cocos2dx_extension_ControlHuePicker_constructor(JSContext *cx, uint32_t 
     return true;
 }
 
-
 extern JSObject *jsb_cocos2d_extension_Control_prototype;
 
 void js_cocos2d_extension_ControlHuePicker_finalize(JSFreeOp *fop, JSObject *obj) {
     CCLOGINFO("jsbindings: finalizing JS object %p (ControlHuePicker)", obj);
 }
-
 void js_register_cocos2dx_extension_ControlHuePicker(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_extension_ControlHuePicker_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocos2d_extension_ControlHuePicker_class->name = "ControlHuePicker";
@@ -2173,13 +2167,11 @@ bool js_cocos2dx_extension_ControlSaturationBrightnessPicker_constructor(JSConte
     return true;
 }
 
-
 extern JSObject *jsb_cocos2d_extension_Control_prototype;
 
 void js_cocos2d_extension_ControlSaturationBrightnessPicker_finalize(JSFreeOp *fop, JSObject *obj) {
     CCLOGINFO("jsbindings: finalizing JS object %p (ControlSaturationBrightnessPicker)", obj);
 }
-
 void js_register_cocos2dx_extension_ControlSaturationBrightnessPicker(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_extension_ControlSaturationBrightnessPicker_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocos2d_extension_ControlSaturationBrightnessPicker_class->name = "ControlSaturationBrightnessPicker";
@@ -2508,16 +2500,7 @@ bool js_cocos2dx_extension_ControlColourPicker_constructor(JSContext *cx, uint32
     if (JS_HasProperty(cx, obj, "_ctor", &ok) && ok)
         ScriptingCore::getInstance()->executeFunctionWithOwner(OBJECT_TO_JSVAL(obj), "_ctor", args);
     return true;
-}
-
-
-extern JSObject *jsb_cocos2d_extension_Control_prototype;
-
-void js_cocos2d_extension_ControlColourPicker_finalize(JSFreeOp *fop, JSObject *obj) {
-    CCLOGINFO("jsbindings: finalizing JS object %p (ControlColourPicker)", obj);
-}
-
-static bool js_cocos2d_extension_ControlColourPicker_ctor(JSContext *cx, uint32_t argc, jsval *vp)
+}static bool js_cocos2dx_extension_ControlColourPicker_ctor(JSContext *cx, uint32_t argc, jsval *vp)
 {
     JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
     JS::RootedObject obj(cx, args.thisv().toObjectOrNull());
@@ -2533,6 +2516,13 @@ static bool js_cocos2d_extension_ControlColourPicker_ctor(JSContext *cx, uint32_
     args.rval().setUndefined();
     return true;
 }
+
+extern JSObject *jsb_cocos2d_extension_Control_prototype;
+
+void js_cocos2d_extension_ControlColourPicker_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOGINFO("jsbindings: finalizing JS object %p (ControlColourPicker)", obj);
+}
+    
 void js_register_cocos2dx_extension_ControlColourPicker(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_extension_ControlColourPicker_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocos2d_extension_ControlColourPicker_class->name = "ControlColourPicker";
@@ -2560,7 +2550,7 @@ void js_register_cocos2dx_extension_ControlColourPicker(JSContext *cx, JS::Handl
         JS_FN("colourSliderValueChanged", js_cocos2dx_extension_ControlColourPicker_colourSliderValueChanged, 2, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("setHuePicker", js_cocos2dx_extension_ControlColourPicker_setHuePicker, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("getBackground", js_cocos2dx_extension_ControlColourPicker_getBackground, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
-        JS_FN("ctor", js_cocos2d_extension_ControlColourPicker_ctor, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("ctor", js_cocos2dx_extension_ControlColourPicker_ctor, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FS_END
     };
 
@@ -3071,16 +3061,7 @@ bool js_cocos2dx_extension_ControlPotentiometer_constructor(JSContext *cx, uint3
     if (JS_HasProperty(cx, obj, "_ctor", &ok) && ok)
         ScriptingCore::getInstance()->executeFunctionWithOwner(OBJECT_TO_JSVAL(obj), "_ctor", args);
     return true;
-}
-
-
-extern JSObject *jsb_cocos2d_extension_Control_prototype;
-
-void js_cocos2d_extension_ControlPotentiometer_finalize(JSFreeOp *fop, JSObject *obj) {
-    CCLOGINFO("jsbindings: finalizing JS object %p (ControlPotentiometer)", obj);
-}
-
-static bool js_cocos2d_extension_ControlPotentiometer_ctor(JSContext *cx, uint32_t argc, jsval *vp)
+}static bool js_cocos2dx_extension_ControlPotentiometer_ctor(JSContext *cx, uint32_t argc, jsval *vp)
 {
     JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
     JS::RootedObject obj(cx, args.thisv().toObjectOrNull());
@@ -3096,6 +3077,13 @@ static bool js_cocos2d_extension_ControlPotentiometer_ctor(JSContext *cx, uint32
     args.rval().setUndefined();
     return true;
 }
+
+extern JSObject *jsb_cocos2d_extension_Control_prototype;
+
+void js_cocos2d_extension_ControlPotentiometer_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOGINFO("jsbindings: finalizing JS object %p (ControlPotentiometer)", obj);
+}
+    
 void js_register_cocos2dx_extension_ControlPotentiometer(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_extension_ControlPotentiometer_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocos2d_extension_ControlPotentiometer_class->name = "ControlPotentiometer";
@@ -3133,7 +3121,7 @@ void js_register_cocos2dx_extension_ControlPotentiometer(JSContext *cx, JS::Hand
         JS_FN("getThumbSprite", js_cocos2dx_extension_ControlPotentiometer_getThumbSprite, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("initWithTrackSprite_ProgressTimer_ThumbSprite", js_cocos2dx_extension_ControlPotentiometer_initWithTrackSprite_ProgressTimer_ThumbSprite, 3, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("potentiometerMoved", js_cocos2dx_extension_ControlPotentiometer_potentiometerMoved, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
-        JS_FN("ctor", js_cocos2d_extension_ControlPotentiometer_ctor, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("ctor", js_cocos2dx_extension_ControlPotentiometer_ctor, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FS_END
     };
 
@@ -3897,16 +3885,7 @@ bool js_cocos2dx_extension_ControlSlider_constructor(JSContext *cx, uint32_t arg
     if (JS_HasProperty(cx, obj, "_ctor", &ok) && ok)
         ScriptingCore::getInstance()->executeFunctionWithOwner(OBJECT_TO_JSVAL(obj), "_ctor", args);
     return true;
-}
-
-
-extern JSObject *jsb_cocos2d_extension_Control_prototype;
-
-void js_cocos2d_extension_ControlSlider_finalize(JSFreeOp *fop, JSObject *obj) {
-    CCLOGINFO("jsbindings: finalizing JS object %p (ControlSlider)", obj);
-}
-
-static bool js_cocos2d_extension_ControlSlider_ctor(JSContext *cx, uint32_t argc, jsval *vp)
+}static bool js_cocos2dx_extension_ControlSlider_ctor(JSContext *cx, uint32_t argc, jsval *vp)
 {
     JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
     JS::RootedObject obj(cx, args.thisv().toObjectOrNull());
@@ -3922,6 +3901,13 @@ static bool js_cocos2d_extension_ControlSlider_ctor(JSContext *cx, uint32_t argc
     args.rval().setUndefined();
     return true;
 }
+
+extern JSObject *jsb_cocos2d_extension_Control_prototype;
+
+void js_cocos2d_extension_ControlSlider_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOGINFO("jsbindings: finalizing JS object %p (ControlSlider)", obj);
+}
+    
 void js_register_cocos2dx_extension_ControlSlider(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_extension_ControlSlider_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocos2d_extension_ControlSlider_class->name = "ControlSlider";
@@ -3961,7 +3947,7 @@ void js_register_cocos2dx_extension_ControlSlider(JSContext *cx, JS::HandleObjec
         JS_FN("getProgressSprite", js_cocos2dx_extension_ControlSlider_getProgressSprite, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("setSelectedThumbSprite", js_cocos2dx_extension_ControlSlider_setSelectedThumbSprite, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("setMaximumAllowedValue", js_cocos2dx_extension_ControlSlider_setMaximumAllowedValue, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
-        JS_FN("ctor", js_cocos2d_extension_ControlSlider_ctor, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("ctor", js_cocos2dx_extension_ControlSlider_ctor, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FS_END
     };
 
@@ -4525,16 +4511,7 @@ bool js_cocos2dx_extension_ControlStepper_constructor(JSContext *cx, uint32_t ar
     if (JS_HasProperty(cx, obj, "_ctor", &ok) && ok)
         ScriptingCore::getInstance()->executeFunctionWithOwner(OBJECT_TO_JSVAL(obj), "_ctor", args);
     return true;
-}
-
-
-extern JSObject *jsb_cocos2d_extension_Control_prototype;
-
-void js_cocos2d_extension_ControlStepper_finalize(JSFreeOp *fop, JSObject *obj) {
-    CCLOGINFO("jsbindings: finalizing JS object %p (ControlStepper)", obj);
-}
-
-static bool js_cocos2d_extension_ControlStepper_ctor(JSContext *cx, uint32_t argc, jsval *vp)
+}static bool js_cocos2dx_extension_ControlStepper_ctor(JSContext *cx, uint32_t argc, jsval *vp)
 {
     JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
     JS::RootedObject obj(cx, args.thisv().toObjectOrNull());
@@ -4550,6 +4527,13 @@ static bool js_cocos2d_extension_ControlStepper_ctor(JSContext *cx, uint32_t arg
     args.rval().setUndefined();
     return true;
 }
+
+extern JSObject *jsb_cocos2d_extension_Control_prototype;
+
+void js_cocos2d_extension_ControlStepper_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOGINFO("jsbindings: finalizing JS object %p (ControlStepper)", obj);
+}
+    
 void js_register_cocos2dx_extension_ControlStepper(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_extension_ControlStepper_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocos2d_extension_ControlStepper_class->name = "ControlStepper";
@@ -4589,7 +4573,7 @@ void js_register_cocos2dx_extension_ControlStepper(JSContext *cx, JS::HandleObje
         JS_FN("getPlusSprite", js_cocos2dx_extension_ControlStepper_getPlusSprite, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("setPlusSprite", js_cocos2dx_extension_ControlStepper_setPlusSprite, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("setMinusSprite", js_cocos2dx_extension_ControlStepper_setMinusSprite, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
-        JS_FN("ctor", js_cocos2d_extension_ControlStepper_ctor, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("ctor", js_cocos2dx_extension_ControlStepper_ctor, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FS_END
     };
 
@@ -5032,16 +5016,7 @@ bool js_cocos2dx_extension_ControlSwitch_constructor(JSContext *cx, uint32_t arg
     if (JS_HasProperty(cx, obj, "_ctor", &ok) && ok)
         ScriptingCore::getInstance()->executeFunctionWithOwner(OBJECT_TO_JSVAL(obj), "_ctor", args);
     return true;
-}
-
-
-extern JSObject *jsb_cocos2d_extension_Control_prototype;
-
-void js_cocos2d_extension_ControlSwitch_finalize(JSFreeOp *fop, JSObject *obj) {
-    CCLOGINFO("jsbindings: finalizing JS object %p (ControlSwitch)", obj);
-}
-
-static bool js_cocos2d_extension_ControlSwitch_ctor(JSContext *cx, uint32_t argc, jsval *vp)
+}static bool js_cocos2dx_extension_ControlSwitch_ctor(JSContext *cx, uint32_t argc, jsval *vp)
 {
     JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
     JS::RootedObject obj(cx, args.thisv().toObjectOrNull());
@@ -5057,6 +5032,13 @@ static bool js_cocos2d_extension_ControlSwitch_ctor(JSContext *cx, uint32_t argc
     args.rval().setUndefined();
     return true;
 }
+
+extern JSObject *jsb_cocos2d_extension_Control_prototype;
+
+void js_cocos2d_extension_ControlSwitch_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOGINFO("jsbindings: finalizing JS object %p (ControlSwitch)", obj);
+}
+    
 void js_register_cocos2dx_extension_ControlSwitch(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_extension_ControlSwitch_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocos2d_extension_ControlSwitch_class->name = "ControlSwitch";
@@ -5081,7 +5063,7 @@ void js_register_cocos2dx_extension_ControlSwitch(JSContext *cx, JS::HandleObjec
         JS_FN("isOn", js_cocos2dx_extension_ControlSwitch_isOn, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("initWithMaskSprite", js_cocos2dx_extension_ControlSwitch_initWithMaskSprite, 4, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("hasMoved", js_cocos2dx_extension_ControlSwitch_hasMoved, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
-        JS_FN("ctor", js_cocos2d_extension_ControlSwitch_ctor, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("ctor", js_cocos2dx_extension_ControlSwitch_ctor, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FS_END
     };
 
@@ -5903,16 +5885,7 @@ bool js_cocos2dx_extension_ScrollView_constructor(JSContext *cx, uint32_t argc, 
     if (JS_HasProperty(cx, obj, "_ctor", &ok) && ok)
         ScriptingCore::getInstance()->executeFunctionWithOwner(OBJECT_TO_JSVAL(obj), "_ctor", args);
     return true;
-}
-
-
-extern JSObject *jsb_cocos2d_Layer_prototype;
-
-void js_cocos2d_extension_ScrollView_finalize(JSFreeOp *fop, JSObject *obj) {
-    CCLOGINFO("jsbindings: finalizing JS object %p (ScrollView)", obj);
-}
-
-static bool js_cocos2d_extension_ScrollView_ctor(JSContext *cx, uint32_t argc, jsval *vp)
+}static bool js_cocos2dx_extension_ScrollView_ctor(JSContext *cx, uint32_t argc, jsval *vp)
 {
     JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
     JS::RootedObject obj(cx, args.thisv().toObjectOrNull());
@@ -5928,6 +5901,13 @@ static bool js_cocos2d_extension_ScrollView_ctor(JSContext *cx, uint32_t argc, j
     args.rval().setUndefined();
     return true;
 }
+
+extern JSObject *jsb_cocos2d_Layer_prototype;
+
+void js_cocos2d_extension_ScrollView_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOGINFO("jsbindings: finalizing JS object %p (ScrollView)", obj);
+}
+    
 void js_register_cocos2dx_extension_ScrollView(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_extension_ScrollView_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocos2d_extension_ScrollView_class->name = "ScrollView";
@@ -5978,7 +5958,7 @@ void js_register_cocos2dx_extension_ScrollView(JSContext *cx, JS::HandleObject g
         JS_FN("isNodeVisible", js_cocos2dx_extension_ScrollView_isNodeVisible, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("minContainerOffset", js_cocos2dx_extension_ScrollView_minContainerOffset, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("setZoomScale", js_cocos2dx_extension_ScrollView_setZoomScale, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
-        JS_FN("ctor", js_cocos2d_extension_ScrollView_ctor, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("ctor", js_cocos2dx_extension_ScrollView_ctor, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FS_END
     };
 
@@ -6120,16 +6100,7 @@ bool js_cocos2dx_extension_TableViewCell_constructor(JSContext *cx, uint32_t arg
     if (JS_HasProperty(cx, obj, "_ctor", &ok) && ok)
         ScriptingCore::getInstance()->executeFunctionWithOwner(OBJECT_TO_JSVAL(obj), "_ctor", args);
     return true;
-}
-
-
-extern JSObject *jsb_cocos2d_Node_prototype;
-
-void js_cocos2d_extension_TableViewCell_finalize(JSFreeOp *fop, JSObject *obj) {
-    CCLOGINFO("jsbindings: finalizing JS object %p (TableViewCell)", obj);
-}
-
-static bool js_cocos2d_extension_TableViewCell_ctor(JSContext *cx, uint32_t argc, jsval *vp)
+}static bool js_cocos2dx_extension_TableViewCell_ctor(JSContext *cx, uint32_t argc, jsval *vp)
 {
     JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
     JS::RootedObject obj(cx, args.thisv().toObjectOrNull());
@@ -6145,6 +6116,13 @@ static bool js_cocos2d_extension_TableViewCell_ctor(JSContext *cx, uint32_t argc
     args.rval().setUndefined();
     return true;
 }
+
+extern JSObject *jsb_cocos2d_Node_prototype;
+
+void js_cocos2d_extension_TableViewCell_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOGINFO("jsbindings: finalizing JS object %p (TableViewCell)", obj);
+}
+    
 void js_register_cocos2dx_extension_TableViewCell(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_extension_TableViewCell_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocos2d_extension_TableViewCell_class->name = "TableViewCell";
@@ -6167,7 +6145,7 @@ void js_register_cocos2dx_extension_TableViewCell(JSContext *cx, JS::HandleObjec
         JS_FN("reset", js_cocos2dx_extension_TableViewCell_reset, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("getIdx", js_cocos2dx_extension_TableViewCell_getIdx, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("setIdx", js_cocos2dx_extension_TableViewCell_setIdx, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
-        JS_FN("ctor", js_cocos2d_extension_TableViewCell_ctor, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("ctor", js_cocos2dx_extension_TableViewCell_ctor, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FS_END
     };
 
@@ -6513,16 +6491,7 @@ bool js_cocos2dx_extension_TableView_constructor(JSContext *cx, uint32_t argc, j
     if (JS_HasProperty(cx, obj, "_ctor", &ok) && ok)
         ScriptingCore::getInstance()->executeFunctionWithOwner(OBJECT_TO_JSVAL(obj), "_ctor", args);
     return true;
-}
-
-
-extern JSObject *jsb_cocos2d_extension_ScrollView_prototype;
-
-void js_cocos2d_extension_TableView_finalize(JSFreeOp *fop, JSObject *obj) {
-    CCLOGINFO("jsbindings: finalizing JS object %p (TableView)", obj);
-}
-
-static bool js_cocos2d_extension_TableView_ctor(JSContext *cx, uint32_t argc, jsval *vp)
+}static bool js_cocos2dx_extension_TableView_ctor(JSContext *cx, uint32_t argc, jsval *vp)
 {
     JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
     JS::RootedObject obj(cx, args.thisv().toObjectOrNull());
@@ -6538,6 +6507,13 @@ static bool js_cocos2d_extension_TableView_ctor(JSContext *cx, uint32_t argc, js
     args.rval().setUndefined();
     return true;
 }
+
+extern JSObject *jsb_cocos2d_extension_ScrollView_prototype;
+
+void js_cocos2d_extension_TableView_finalize(JSFreeOp *fop, JSObject *obj) {
+    CCLOGINFO("jsbindings: finalizing JS object %p (TableView)", obj);
+}
+    
 void js_register_cocos2dx_extension_TableView(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_extension_TableView_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocos2d_extension_TableView_class->name = "TableView";
@@ -6569,7 +6545,7 @@ void js_register_cocos2dx_extension_TableView(JSContext *cx, JS::HandleObject gl
         JS_FN("insertCellAtIndex", js_cocos2dx_extension_TableView_insertCellAtIndex, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("cellAtIndex", js_cocos2dx_extension_TableView_cellAtIndex, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FN("dequeueCell", js_cocos2dx_extension_TableView_dequeueCell, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
-        JS_FN("ctor", js_cocos2d_extension_TableView_ctor, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+        JS_FN("ctor", js_cocos2dx_extension_TableView_ctor, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
         JS_FS_END
     };
 
@@ -6800,13 +6776,11 @@ bool js_cocos2dx_extension_EventAssetsManagerEx_constructor(JSContext *cx, uint3
     return true;
 }
 
-
 extern JSObject *jsb_cocos2d_EventCustom_prototype;
 
 void js_cocos2d_extension_EventAssetsManagerEx_finalize(JSFreeOp *fop, JSObject *obj) {
     CCLOGINFO("jsbindings: finalizing JS object %p (EventAssetsManagerEx)", obj);
 }
-
 void js_register_cocos2dx_extension_EventAssetsManagerEx(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_extension_EventAssetsManagerEx_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocos2d_extension_EventAssetsManagerEx_class->name = "EventAssetsManager";
@@ -6997,11 +6971,9 @@ bool js_cocos2dx_extension_Manifest_getSearchPaths(JSContext *cx, uint32_t argc,
     return false;
 }
 
-
 void js_cocos2d_extension_Manifest_finalize(JSFreeOp *fop, JSObject *obj) {
     CCLOGINFO("jsbindings: finalizing JS object %p (Manifest)", obj);
 }
-
 void js_register_cocos2dx_extension_Manifest(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_extension_Manifest_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocos2d_extension_Manifest_class->name = "Manifest";
@@ -7259,12 +7231,9 @@ bool js_cocos2dx_extension_AssetsManagerEx_constructor(JSContext *cx, uint32_t a
     return true;
 }
 
-
-
 void js_cocos2d_extension_AssetsManagerEx_finalize(JSFreeOp *fop, JSObject *obj) {
     CCLOGINFO("jsbindings: finalizing JS object %p (AssetsManagerEx)", obj);
 }
-
 void js_register_cocos2dx_extension_AssetsManagerEx(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_extension_AssetsManagerEx_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocos2d_extension_AssetsManagerEx_class->name = "AssetsManager";
@@ -7365,8 +7334,8 @@ bool js_cocos2dx_extension_EventListenerAssetsManagerEx_init(JSContext *cx, uint
 		            }
 		        } while (0);
 		            JS::RootedValue rval(cx);
-		            bool ok = func->invoke(1, &largv[0], &rval);
-		            if (!ok && JS_IsExceptionPending(cx)) {
+		            bool succeed = func->invoke(1, &largv[0], &rval);
+		            if (!succeed && JS_IsExceptionPending(cx)) {
 		                JS_ReportPendingException(cx);
 		            }
 		        };
@@ -7420,8 +7389,8 @@ bool js_cocos2dx_extension_EventListenerAssetsManagerEx_create(JSContext *cx, ui
 		            }
 		        } while (0);
 		            JS::RootedValue rval(cx);
-		            bool ok = func->invoke(1, &largv[0], &rval);
-		            if (!ok && JS_IsExceptionPending(cx)) {
+		            bool succeed = func->invoke(1, &largv[0], &rval);
+		            if (!succeed && JS_IsExceptionPending(cx)) {
 		                JS_ReportPendingException(cx);
 		            }
 		        };
@@ -7480,13 +7449,11 @@ bool js_cocos2dx_extension_EventListenerAssetsManagerEx_constructor(JSContext *c
     return true;
 }
 
-
 extern JSObject *jsb_cocos2d_EventListenerCustom_prototype;
 
 void js_cocos2d_extension_EventListenerAssetsManagerEx_finalize(JSFreeOp *fop, JSObject *obj) {
     CCLOGINFO("jsbindings: finalizing JS object %p (EventListenerAssetsManagerEx)", obj);
 }
-
 void js_register_cocos2dx_extension_EventListenerAssetsManagerEx(JSContext *cx, JS::HandleObject global) {
     jsb_cocos2d_extension_EventListenerAssetsManagerEx_class = (JSClass *)calloc(1, sizeof(JSClass));
     jsb_cocos2d_extension_EventListenerAssetsManagerEx_class->name = "EventListenerAssetsManager";
