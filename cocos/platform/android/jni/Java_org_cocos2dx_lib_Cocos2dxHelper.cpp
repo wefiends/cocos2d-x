@@ -168,6 +168,20 @@ std::string getFileDirectoryJNI() {
     return ret;
 }
 
+std::string getExternalFilesDirectoryJNI() {
+    JniMethodInfo t;
+    std::string ret("");
+    
+    if (JniHelper::getStaticMethodInfo(t, CLASS_NAME, "getCocos2dxExternalFilesPath", "()Ljava/lang/String;")) {
+        jstring str = (jstring)t.env->CallStaticObjectMethod(t.classID, t.methodID);
+        t.env->DeleteLocalRef(t.classID);
+        ret = JniHelper::jstring2string(str);
+        t.env->DeleteLocalRef(str);
+    }
+    
+    return ret;
+}
+
 std::string getCurrentLanguageJNI() {
     JniMethodInfo t;
     std::string ret("");

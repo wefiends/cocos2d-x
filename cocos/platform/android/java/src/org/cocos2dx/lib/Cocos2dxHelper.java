@@ -71,6 +71,7 @@ public class Cocos2dxHelper {
     private static boolean sActivityVisible;
     private static String sPackageName;
     private static String sFileDirectory;
+    private static String sExternalFilesDirectory;
     private static Activity sActivity = null;
     private static Cocos2dxHelperListener sCocos2dxHelperListener;
     private static Set<OnActivityResultListener> onActivityResultListeners = new LinkedHashSet<OnActivityResultListener>();
@@ -102,6 +103,7 @@ public class Cocos2dxHelper {
                 Cocos2dxHelper.sFileDirectory = activity.getFilesDir().getAbsolutePath();
             }
             
+            Cocos2dxHelper.sExternalFilesDirectory = activity.getExternalFilesDir(null).getAbsolutePath();
             Cocos2dxHelper.nativeSetApkPath(applicationInfo.sourceDir);
     
             Cocos2dxHelper.sCocos2dxAccelerometer = new Cocos2dxAccelerometer(activity);
@@ -176,6 +178,10 @@ public class Cocos2dxHelper {
 
     public static String getCocos2dxWritablePath() {
         return Cocos2dxHelper.sFileDirectory;
+    }
+    
+    public static String getCocos2dxExternalFilesPath() {
+        return Cocos2dxHelper.sExternalFilesDirectory;
     }
 
     public static String getCurrentLanguage() {
