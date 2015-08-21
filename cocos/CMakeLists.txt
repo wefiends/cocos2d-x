@@ -125,10 +125,6 @@ else()
   add_definitions(-DCC_USE_WEBP=0)
 endif()
 
-if(USE_CHIPMUNK)
-  cocos_use_pkg(cocos2d CHIPMUNK)
-endif()
-
 if(USE_BOX2D)
   cocos_use_pkg(cocos2d Box2D)
 endif()

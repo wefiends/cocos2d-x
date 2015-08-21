@@ -220,18 +220,6 @@ if(USE_WEBP)
   cocos_find_package(WebP WEBP REQUIRED)
 endif(USE_WEBP)
 
-# Chipmunk
-if(USE_CHIPMUNK)
-  cocos_find_package(Chipmunk CHIPMUNK REQUIRED)
-  add_definitions(-DCC_ENABLE_CHIPMUNK_INTEGRATION=1)
-  if(IOS OR MACOSX)
-    # without this chipmunk will try to use apple defined geometry types, that conflicts with cocos
-    add_definitions(-DCP_USE_CGPOINTS=0)
-  endif()
-else(USE_CHIPMUNK)
-  add_definitions(-DCC_USE_PHYSICS=0)
-endif(USE_CHIPMUNK)
-
 # Box2d (not prebuilded, exists as source)
 if(USE_BOX2D)
   if(USE_PREBUILT_LIBS)
