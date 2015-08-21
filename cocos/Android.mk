@@ -198,19 +198,6 @@ physics/CCPhysicsContact.cpp \
 physics/CCPhysicsJoint.cpp \
 physics/CCPhysicsShape.cpp \
 physics/CCPhysicsWorld.cpp \
-physics3d/CCPhysics3D.cpp \
-physics3d/CCPhysics3DWorld.cpp \
-physics3d/CCPhysics3DComponent.cpp \
-physics3d/CCPhysics3DDebugDrawer.cpp \
-physics3d/CCPhysics3DObject.cpp \
-physics3d/CCPhysics3DShape.cpp \
-physics3d/CCPhysicsSprite3D.cpp \
-physics3d/CCPhysics3DConstraint.cpp \
-navmesh/CCNavMesh.cpp \
-navmesh/CCNavMeshAgent.cpp \
-navmesh/CCNavMeshDebugDraw.cpp \
-navmesh/CCNavMeshObstacle.cpp \
-navmesh/CCNavMeshUtils.cpp \
 ../external/ConvertUTF/ConvertUTFWrapper.cpp \
 ../external/ConvertUTF/ConvertUTF.c \
 ../external/tinyxml2/tinyxml2.cpp \
@@ -269,7 +256,6 @@ LOCAL_STATIC_LIBRARIES += cocos_tiff_static
 LOCAL_STATIC_LIBRARIES += cocos_webp_static
 LOCAL_STATIC_LIBRARIES += cocos_chipmunk_static
 LOCAL_STATIC_LIBRARIES += cocos_zlib_static
-LOCAL_STATIC_LIBRARIES += recast_static
 
 LOCAL_WHOLE_STATIC_LIBRARIES := cocos2dxandroid_static
 
@@ -300,10 +286,5 @@ $(call import-module,zlib/prebuilt/android)
 $(call import-module,jpeg/prebuilt/android)
 $(call import-module,tiff/prebuilt/android)
 $(call import-module,webp/prebuilt/android)
-$(call import-module,chipmunk/prebuilt/android)
 $(call import-module,3d)
 $(call import-module,Box2D)
-$(call import-module,recast)
-$(call import-module,curl/prebuilt/android)
-$(call import-module,websockets/prebuilt/android)
-$(call import-module,flatbuffers)
