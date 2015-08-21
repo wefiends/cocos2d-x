@@ -69,7 +69,6 @@ if(MSVC)
   set(BUILD_JS_TESTS_DEFAULT OFF)
 endif()
 
-option(USE_CHIPMUNK "Use chipmunk for physics library" ON)
 option(USE_BOX2D "Use box2d for physics library" OFF)
 option(USE_BULLET "Use bullet for physics3d library" ON)
 option(USE_RECAST "Use Recast for navigation mesh" ON)
@@ -323,17 +322,6 @@ endif()
 
 cocos_find_package(PNG PNG REQUIRED)
 cocos_find_package(TIFF TIFF REQUIRED)
-cocos_find_package(WEBSOCKETS WEBSOCKETS REQUIRED)
-cocos_find_package(CURL CURL REQUIRED)
-
-# flatbuffers
-if(USE_PREBUILT_LIBS)
-  add_subdirectory(external/flatbuffers)
-  set(FLATBUFFERS_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/external)
-  message(STATUS "Flatbuffers include dirs: ${FLATBUFFERS_INCLUDE_DIRS}")
-else()
-  cocos_find_package(flatbuffers flatbuffers REQUIRED)
-endif()
 
 # xxhash
 if(USE_PREBUILT_LIBS)
