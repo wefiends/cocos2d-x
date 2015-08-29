@@ -39,7 +39,6 @@ include(math/CMakeLists.txt)
 include(renderer/CMakeLists.txt)
 include(base/CMakeLists.txt)
 include(deprecated/CMakeLists.txt)
-include(audio/CMakeLists.txt)
 include_directories(audio/include)
 
 set(COCOS_SRC cocos2d.cpp
@@ -52,7 +51,6 @@ set(COCOS_SRC cocos2d.cpp
     ${COCOS_NAVMESH_SRC}
     ${COCOS_RENDERER_SRC}
     ${COCOS_BASE_SRC}
-    ${COCOS_AUDIO_SRC}
     ${COCOS_UI_SRC}
     ${COCOS_DEPRECATED_SRC}
     ${COCOS_NETWORK_SRC}
@@ -69,7 +67,7 @@ add_library(cocos2d ${COCOS_SRC})
 
 set(PLATFORM_SPECIFIC_LIBS)
 if(WINDOWS)
-  foreach(_pkg OPENGL GLEW GLFW3 VORBIS MPG123 OPENAL)
+  foreach(_pkg OPENGL GLEW GLFW3)
     cocos_use_pkg(cocos2d ${_pkg})
   endforeach()
   list(APPEND PLATFORM_SPECIFIC_LIBS ws2_32 winmm)
@@ -108,7 +106,7 @@ else()
   message( FATAL_ERROR "Unsupported platform, CMake will exit" )
 endif()
 
-foreach(pkg ZLIB MINIZIP JPEG PNG TIFF TinyXML2 FREETYPE WEBSOCKETS CURL FLATBUFFERS XXHASH)
+foreach(pkg ZLIB MINIZIP PNG TinyXML2 FREETYPE XXHASH)
   cocos_use_pkg(cocos2d ${pkg})
 endforeach()
 

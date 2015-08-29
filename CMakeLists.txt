@@ -204,9 +204,6 @@ if(LINUX OR MACOSX OR WINDOWS)
   endif()
 
   if(WINDOWS)
-    cocos_find_package(Vorbis VORBIS REQUIRED)
-    cocos_find_package(MPG123 MPG123 REQUIRED)
-    cocos_find_package(OpenAL OPENAL REQUIRED)
     # because FindOpenAL.cmake set include dir for '#include <al.h>' for portability (not for '#include <AL/al.h>'
     set(OPENAL_DEFINITIONS "-DOPENAL_PLAIN_INCLUDES")
   endif()
@@ -281,8 +278,6 @@ else()
 endif()
 message(STATUS "TinyXML2 include dirs: ${TinyXML2_INCLUDE_DIRS}")
 
-# libjpeg
-cocos_find_package(JPEG JPEG REQUIRED)
 cocos_find_package(ZLIB ZLIB REQUIRED)
 
 # minizip (we try to migrate to minizip from https://github.com/nmoinvaz/minizip)
@@ -307,9 +302,6 @@ else()
   endif()
   add_definitions(-DMINIZIP_FROM_SYSTEM)
 endif()
-
-cocos_find_package(PNG PNG REQUIRED)
-cocos_find_package(TIFF TIFF REQUIRED)
 
 # xxhash
 if(USE_PREBUILT_LIBS)

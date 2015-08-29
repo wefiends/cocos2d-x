@@ -64,17 +64,22 @@ set(_fmod_prefix FMODEX)
 set(_fmod_inc fmod.h)
 set(_fmod_libs fmodex fmodex64 fmodexL fmodexL64)
 
+# set(all_prebuilt_libs
+#   chipmunk
+#   curl
+#   freetype2
+#   jpeg
+#   png
+#   tiff
+#   webp
+#   websockets
+# )
+
 set(all_prebuilt_libs
   chipmunk
-  curl
   freetype2
-  jpeg
   png
-  tiff
-  webp
-  websockets
 )
-
 
 if(MACOSX)
   list(APPEND all_prebuilt_libs glfw3 zlib)
@@ -82,7 +87,7 @@ endif()
 
 # We use MSVC instead of WINDOWS because it can be mingw that can't use our prebuilt libs
 if(MSVC)
-  list(APPEND all_prebuilt_libs glfw3 sqlite3 gles icon MP3Decoder OggDecoder OpenalSoft zlib)
+  list(APPEND all_prebuilt_libs glfw3 sqlite3 gles icon zlib)
 endif()
 
 if(LINUX)
