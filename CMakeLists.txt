@@ -212,11 +212,6 @@ endif(LINUX OR MACOSX OR WINDOWS)
 # Freetype required on all platforms
 cocos_find_package(Freetype FREETYPE REQUIRED)
 
-# WebP required if used
-if(USE_WEBP)
-  cocos_find_package(WebP WEBP REQUIRED)
-endif(USE_WEBP)
-
 # Box2d (not prebuilded, exists as source)
 if(USE_BOX2D)
   if(USE_PREBUILT_LIBS)
