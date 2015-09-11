@@ -95,7 +95,8 @@ int Application::run()
         }
         else
         {
-            Sleep(1);
+			std::this_thread::sleep_for(std::chrono::microseconds(500));
+            //Sleep(1);
         }
     }
 
