@@ -116,23 +116,8 @@ endif(LINUX)
 
 target_link_libraries(cocos2d ${PLATFORM_SPECIFIC_LIBS} ${glfw_other_linker_flags})
 
-if(USE_WEBP)
-  add_definitions(-DCC_USE_WEBP=1)
-  cocos_use_pkg(cocos2d WEBP)
-else()
-  add_definitions(-DCC_USE_WEBP=0)
-endif()
-
 if(USE_BOX2D)
   cocos_use_pkg(cocos2d Box2D)
-endif()
-
-if(USE_BULLET)
-  cocos_use_pkg(cocos2d BULLET)
-endif()
-
-if(USE_RECAST)
-  cocos_use_pkg(cocos2d RECAST)
 endif()
 
 set_target_properties(cocos2d
