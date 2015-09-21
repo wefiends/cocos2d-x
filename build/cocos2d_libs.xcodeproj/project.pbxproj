@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		01B1F47C1BB02EAF00870B5C /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 01B1F47B1BB02EAF00870B5C /* libsqlite3.dylib */; };
 		01DF3F4D1B85C77800C4CC7A /* CCAABB.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 01DF3F1E1B85C77800C4CC7A /* CCAABB.cpp */; };
 		01DF3F4E1B85C77800C4CC7A /* CCAABB.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 01DF3F1E1B85C77800C4CC7A /* CCAABB.cpp */; };
 		01DF3F4F1B85C77800C4CC7A /* CCAABB.h in Headers */ = {isa = PBXBuildFile; fileRef = 01DF3F1F1B85C77800C4CC7A /* CCAABB.h */; };
@@ -1123,7 +1124,6 @@
 		B21770421977ECF8009EE11B /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B21770411977ECF8009EE11B /* ApplicationServices.framework */; };
 		B21770451977ED14009EE11B /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B21770431977ED07009EE11B /* Cocoa.framework */; };
 		B21770471977ED34009EE11B /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B21770461977ED34009EE11B /* QuartzCore.framework */; };
-		B217704E1977ED9F009EE11B /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B217704C1977ED8B009EE11B /* libsqlite3.dylib */; };
 		B230ED7119B417AE00364AA8 /* CCTrianglesCommand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B230ED6F19B417AE00364AA8 /* CCTrianglesCommand.cpp */; };
 		B230ED7219B417AE00364AA8 /* CCTrianglesCommand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B230ED6F19B417AE00364AA8 /* CCTrianglesCommand.cpp */; };
 		B230ED7319B417AE00364AA8 /* CCTrianglesCommand.h in Headers */ = {isa = PBXBuildFile; fileRef = B230ED7019B417AE00364AA8 /* CCTrianglesCommand.h */; };
@@ -1204,6 +1204,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		01B1F47B1BB02EAF00870B5C /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = ../../../../../../usr/lib/libsqlite3.dylib; sourceTree = "<group>"; };
 		01DF3F1E1B85C77800C4CC7A /* CCAABB.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CCAABB.cpp; sourceTree = "<group>"; };
 		01DF3F1F1B85C77800C4CC7A /* CCAABB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCAABB.h; sourceTree = "<group>"; };
 		01DF3F2F1B85C77800C4CC7A /* CCFrustum.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CCFrustum.cpp; sourceTree = "<group>"; };
@@ -1898,8 +1899,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				01B1F47C1BB02EAF00870B5C /* libsqlite3.dylib in Frameworks */,
 				29031E0719BFE8D400EFA1DF /* libchipmunk.a in Frameworks */,
-				B217704E1977ED9F009EE11B /* libsqlite3.dylib in Frameworks */,
 				B21770471977ED34009EE11B /* QuartzCore.framework in Frameworks */,
 				B21770451977ED14009EE11B /* Cocoa.framework in Frameworks */,
 				B21770421977ECF8009EE11B /* ApplicationServices.framework in Frameworks */,
@@ -1985,6 +1986,7 @@
 		1551A341158F2AB200E66CFE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				01B1F47B1BB02EAF00870B5C /* libsqlite3.dylib */,
 				2905E9CC1ACD3D8C00092DD2 /* libz.a */,
 				292F1A661A524F2700E479F8 /* libssl.dylib */,
 				B217704C1977ED8B009EE11B /* libsqlite3.dylib */,
