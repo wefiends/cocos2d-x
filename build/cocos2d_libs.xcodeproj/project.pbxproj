@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		01B1F47C1BB02EAF00870B5C /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 01B1F47B1BB02EAF00870B5C /* libsqlite3.dylib */; };
 		01DF3F4D1B85C77800C4CC7A /* CCAABB.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 01DF3F1E1B85C77800C4CC7A /* CCAABB.cpp */; };
 		01DF3F4E1B85C77800C4CC7A /* CCAABB.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 01DF3F1E1B85C77800C4CC7A /* CCAABB.cpp */; };
 		01DF3F4F1B85C77800C4CC7A /* CCAABB.h in Headers */ = {isa = PBXBuildFile; fileRef = 01DF3F1F1B85C77800C4CC7A /* CCAABB.h */; };
@@ -1899,7 +1898,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				01B1F47C1BB02EAF00870B5C /* libsqlite3.dylib in Frameworks */,
 				29031E0719BFE8D400EFA1DF /* libchipmunk.a in Frameworks */,
 				B21770471977ED34009EE11B /* QuartzCore.framework in Frameworks */,
 				B21770451977ED14009EE11B /* Cocoa.framework in Frameworks */,
