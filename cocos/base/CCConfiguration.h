@@ -124,6 +124,12 @@ public:
      */
     bool supportsATITC() const;
     
+    /** Whether or not ATITC Texture Compressed is supported.
+     *
+     * @return Is true if supports ATITC Texture Compressed.
+     */
+    bool supportsASTC() const;
+    
     /** Whether or not BGRA8888 textures are supported.
      *
      * @return Is true if supports BGRA8888 textures.
@@ -224,6 +230,7 @@ protected:
     bool            _supportsETC1;
     bool            _supportsS3TC;
     bool            _supportsATITC;
+    bool            _supportsASTC;
     bool            _supportsNPOT;
     bool            _supportsBGRA8888;
     bool            _supportsDiscardFramebuffer;
