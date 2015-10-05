@@ -404,6 +404,38 @@ namespace
 
 //////////////////////////////////////////////////////////////////////////
 
+//struct and data for astc struct
+/* ASTC texture compression internal formats. */
+#define GL_COMPRESSED_RGBA_ASTC_4x4_KHR            (0x93B0)
+#define GL_COMPRESSED_RGBA_ASTC_5x4_KHR            (0x93B1)
+#define GL_COMPRESSED_RGBA_ASTC_5x5_KHR            (0x93B2)
+#define GL_COMPRESSED_RGBA_ASTC_6x5_KHR            (0x93B3)
+#define GL_COMPRESSED_RGBA_ASTC_6x6_KHR            (0x93B4)
+#define GL_COMPRESSED_RGBA_ASTC_8x5_KHR            (0x93B5)
+#define GL_COMPRESSED_RGBA_ASTC_8x6_KHR            (0x93B6)
+#define GL_COMPRESSED_RGBA_ASTC_8x8_KHR            (0x93B7)
+#define GL_COMPRESSED_RGBA_ASTC_10x5_KHR           (0x93B8)
+#define GL_COMPRESSED_RGBA_ASTC_10x6_KHR           (0x93B9)
+#define GL_COMPRESSED_RGBA_ASTC_10x8_KHR           (0x93BA)
+#define GL_COMPRESSED_RGBA_ASTC_10x10_KHR          (0x93BB)
+#define GL_COMPRESSED_RGBA_ASTC_12x10_KHR          (0x93BC)
+#define GL_COMPRESSED_RGBA_ASTC_12x12_KHR          (0x93BD)
+
+namespace {
+    struct ASTCTexHeader
+    {
+        unsigned char id[4];
+        unsigned char blkdimension_x;
+        unsigned char blkdimension_y;
+        unsigned char blkdimension_z;
+        unsigned char size_x[3];
+        unsigned char size_y[3];
+        unsigned char size_z[3];
+    };
+}
+
+//////////////////////////////////////////////////////////////////////////
+
 namespace
 {
     typedef struct 
@@ -565,6 +597,9 @@ bool Image::initWithImageData(const unsigned char * data, ssize_t dataLen)
         case Format::ATITC:
             ret = initWithATITCData(unpackedData, unpackedLen);
             break;
+        case Format::ASTC:
+            ret = initWithASTCData(unpackedData, unpackedLen);
+            break;
         default:
             {
                 // load and detect image format
@@ -630,6 +665,17 @@ bool Image::isATITC(const unsigned char *data, ssize_t dataLen)
     
     if (strncmp(&header->identifier[1], "KTX", 3) != 0)
     {
+        return false;
+    }
+    return true;
+}
+
+bool Image::isASTC(const unsigned char *data, ssize_t dataLen)
+{
+    ASTCTexHeader *header = (ASTCTexHeader *)data;
+    
+    const unsigned char magic[] = { 0x5C, 0xA1, 0xAB, 0x13 };
+    if (memcmp(header->id, magic, 4)) {
         return false;
     }
     return true;
@@ -721,6 +767,10 @@ Image::Format Image::detectFormat(const unsigned char * data, ssize_t dataLen)
     else if (isATITC(data, dataLen))
     {
         return Format::ATITC;
+    }
+    else if (isASTC(data, dataLen))
+    {
+        return Format::ASTC;
     }
     else
     {
@@ -2098,6 +2148,70 @@ bool Image::initWithATITCData(const unsigned char *data, ssize_t dataLen)
     /* end load the mipmaps */
     
     return true;
+}
+
+bool Image::initWithASTCData(const unsigned char *data, ssize_t dataLen)
+{
+    if (Configuration::getInstance()->supportsASTC()) {
+        ASTCTexHeader *header = (ASTCTexHeader *) data;
+        
+        /* Blocks */
+        int size_x, size_y, size_z = 0;
+        
+        // Merge size arrays into int.
+        size_x = header->size_x[0] + (header->size_x[1] << 8) + (header->size_x[2] << 16);
+        size_y = header->size_y[0] + (header->size_y[1] << 8) + (header->size_y[2] << 16);
+        size_z = header->size_z[0] + (header->size_z[1] << 8) + (header->size_z[2] << 16);
+        
+        _width = size_x;
+        _height = size_y;
+        
+        /* Bytes per dimension. */
+        int blocks_x, blocks_y, blocks_z = 0;
+        
+        //Find block size for each dimension
+        blocks_x = (size_x + header->blkdimension_x - 1) / header->blkdimension_x;
+        blocks_y = (size_y + header->blkdimension_y - 1) / header->blkdimension_y;
+        blocks_z = (size_z + header->blkdimension_z - 1) / header->blkdimension_z;
+        
+        //Compressed data size
+        _dataLen = (blocks_x * blocks_y * blocks_z) * 16;
+        _data = static_cast<unsigned char*>(malloc(_dataLen * sizeof(unsigned char)));
+        memcpy((void*)_data, (void*)&header[1], _dataLen);
+        
+        if (header->blkdimension_x == 4 && header->blkdimension_y == 4)
+        {
+            _renderFormat = Texture2D::PixelFormat::ASTC_4x4;
+        }
+        else if (header->blkdimension_x == 5 && header->blkdimension_y == 4)
+        {
+            _renderFormat = Texture2D::PixelFormat::ASTC_5x4;
+        }
+        else if (header->blkdimension_x == 5 && header->blkdimension_y == 5)
+        {
+            _renderFormat = Texture2D::PixelFormat::ASTC_5x5;
+        }
+        else if (header->blkdimension_x == 6 && header->blkdimension_y == 5)
+        {
+            _renderFormat = Texture2D::PixelFormat::ASTC_6x5;
+        }
+        else if (header->blkdimension_x == 6 && header->blkdimension_y == 6)
+        {
+            _renderFormat = Texture2D::PixelFormat::ASTC_6x6;
+        }
+        else
+        {
+            return false;
+        }
+        
+        _numberOfMipmaps = 0;
+        _mipmaps[0].address = (unsigned char *)_data;
+        _mipmaps[0].len = _dataLen;
+        
+        return true;
+    }
+    
+    return false;
 }
 
 bool Image::initWithPVRData(const unsigned char * data, ssize_t dataLen)
