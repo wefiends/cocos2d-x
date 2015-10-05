@@ -45,6 +45,7 @@ Configuration::Configuration()
 , _supportsETC1(false)
 , _supportsS3TC(false)
 , _supportsATITC(false)
+, _supportsASTC(false)
 , _supportsNPOT(false)
 , _supportsBGRA8888(false)
 , _supportsDiscardFramebuffer(false)
@@ -137,6 +138,9 @@ void Configuration::gatherGPUInfo()
     
     _supportsPVRTC = checkForGLExtension("GL_IMG_texture_compression_pvrtc");
 	_valueDict["gl.supports_PVRTC"] = Value(_supportsPVRTC);
+    
+    _supportsASTC = checkForGLExtension("GL_KHR_texture_compression_astc_ldr");
+    _valueDict["gl.supports_ASTC"] = Value(_supportsASTC);
 
     _supportsNPOT = true;
 	_valueDict["gl.supports_NPOT"] = Value(_supportsNPOT);
@@ -238,6 +242,11 @@ bool Configuration::supportsS3TC() const
 bool Configuration::supportsATITC() const
 {
     return _supportsATITC;
+}
+
+bool Configuration::supportsASTC() const
+{
+    return _supportsASTC;
 }
 
 bool Configuration::supportsBGRA8888() const

@@ -108,6 +108,31 @@ namespace {
         PixelFormatInfoMapValue(Texture2D::PixelFormat::ATC_INTERPOLATED_ALPHA, Texture2D::PixelFormatInfo(GL_ATC_RGBA_INTERPOLATED_ALPHA_AMD,
             0xFFFFFFFF, 0xFFFFFFFF, 8, true, false)),
 #endif
+        
+#ifdef GL_COMPRESSED_RGBA_ASTC_4x4_KHR
+        PixelFormatInfoMapValue(Texture2D::PixelFormat::ASTC_4x4, Texture2D::PixelFormatInfo(GL_COMPRESSED_RGBA_ASTC_4x4_KHR,
+            0xFFFFFFFF, 0xFFFFFFFF, 8, true, false)),
+#endif
+        
+#ifdef GL_COMPRESSED_RGBA_ASTC_5x4_KHR
+        PixelFormatInfoMapValue(Texture2D::PixelFormat::ASTC_5x4, Texture2D::PixelFormatInfo(GL_COMPRESSED_RGBA_ASTC_5x4_KHR,
+            0xFFFFFFFF, 0xFFFFFFFF, 8, true, false)),
+#endif
+        
+#ifdef GL_COMPRESSED_RGBA_ASTC_5x5_KHR
+        PixelFormatInfoMapValue(Texture2D::PixelFormat::ASTC_5x5, Texture2D::PixelFormatInfo(GL_COMPRESSED_RGBA_ASTC_5x5_KHR,
+            0xFFFFFFFF, 0xFFFFFFFF, 8, true, false)),
+#endif
+        
+#ifdef GL_COMPRESSED_RGBA_ASTC_6x5_KHR
+        PixelFormatInfoMapValue(Texture2D::PixelFormat::ASTC_6x5, Texture2D::PixelFormatInfo(GL_COMPRESSED_RGBA_ASTC_6x5_KHR,
+            0xFFFFFFFF, 0xFFFFFFFF, 8, true, false)),
+#endif
+        
+#ifdef GL_COMPRESSED_RGBA_ASTC_6x6_KHR
+        PixelFormatInfoMapValue(Texture2D::PixelFormat::ASTC_6x6, Texture2D::PixelFormatInfo(GL_COMPRESSED_RGBA_ASTC_6x6_KHR,
+            0xFFFFFFFF, 0xFFFFFFFF, 8, true, false)),
+#endif
     };
 }
 
