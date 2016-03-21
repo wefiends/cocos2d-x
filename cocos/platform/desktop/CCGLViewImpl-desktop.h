@@ -29,6 +29,8 @@ THE SOFTWARE.
 #include "base/CCRef.h"
 #include "platform/CCCommon.h"
 #include "platform/CCGLView.h"
+#include <glad/glad.h>
+#define GLFW_INCLUDE_NONE
 #include "glfw3.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)

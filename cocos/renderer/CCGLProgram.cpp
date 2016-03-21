@@ -126,7 +126,8 @@ const char* GLProgram::ATTRIBUTE_NAME_BINORMAL = "a_binormal";
 
 
 static const char * COCOS2D_SHADER_UNIFORMS =
-        "uniform mat4 CC_PMatrix;\n"
+        "precision lowp float;\n"
+		"uniform mat4 CC_PMatrix;\n"
         "uniform mat4 CC_MVMatrix;\n"
         "uniform mat4 CC_MVPMatrix;\n"
         "uniform mat3 CC_NormalMatrix;\n"

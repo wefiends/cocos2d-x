@@ -29,9 +29,23 @@ THE SOFTWARE.
 #include "platform/CCPlatformConfig.h"
 #if CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
 
-#include "GL/glew.h"
+#include "glad/glad.h"
+
+#define glClearDepth                glClearDepthf
+#define glDeleteVertexArrays        glDeleteVertexArraysOES
+#define glGenVertexArrays           glGenVertexArraysOES
+#define glBindVertexArray           glBindVertexArrayOES
+#define glMapBuffer                 glMapBufferOES
+#define glUnmapBuffer               glUnmapBufferOES
+
+#define GL_DEPTH24_STENCIL8         GL_DEPTH24_STENCIL8_OES
+#define GL_WRITE_ONLY               GL_WRITE_ONLY_OES
 
 #define CC_GL_DEPTH24_STENCIL8      GL_DEPTH24_STENCIL8
+
+#define GL_BGRA						GL_BGRA_EXT
+#define GL_LUMINANCE				GL_LUMINANCE8_EXT
+#define GL_LUMINANCE_ALPHA			GL_LUMINANCE8_ALPHA8_EXT
 
 #endif // CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
 

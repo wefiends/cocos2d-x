@@ -348,6 +348,8 @@ bool GLViewImpl::initWithRect(const std::string& viewName, Rect rect, float fram
 
     _frameZoomFactor = frameZoomFactor;
 
+	glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_RESIZABLE,GL_FALSE);
     glfwWindowHint(GLFW_RED_BITS,_glContextAttrs.redBits);
     glfwWindowHint(GLFW_GREEN_BITS,_glContextAttrs.greenBits);
@@ -410,22 +412,26 @@ bool GLViewImpl::initWithRect(const std::string& viewName, Rect rect, float fram
     setFrameSize(rect.size.width, rect.size.height);
 
     // check OpenGL version at first
-    const GLubyte* glVersion = glGetString(GL_VERSION);
+    //const GLubyte* glVersion = glGetString(GL_VERSION);
 
-    if ( utils::atof((const char*)glVersion) < 1.5 )
-    {
-        char strComplain[256] = {0};
-        sprintf(strComplain,
-                "OpenGL 1.5 or higher is required (your version is %s). Please upgrade the driver of your video card.",
-                glVersion);
-        MessageBox(strComplain, "OpenGL version too old");
-        return false;
-    }
+    //if ( utils::atof((const char*)glVersion) < 1.5 )
+    //{
+    //    char strComplain[256] = {0};
+    //    sprintf(strComplain,
+    //            "OpenGL 1.5 or higher is required (your version is %s). Please upgrade the driver of your video card.",
+    //            glVersion);
+    //    MessageBox(strComplain, "OpenGL version too old");
+    //    return false;
+    //}
 
-    initGlew();
+    //initGlew();
+	if (!gladLoadGLES2Loader((GLADloadproc) glfwGetProcAddress))
+	{
+		CCLOG("Failed to initialize OpenGL contect");
+	}
 
     // Enable point size by default.
-    glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
+    //glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
 
     return true;
 }
@@ -823,9 +829,9 @@ static bool glew_dynamic_binding()
             glDeleteFramebuffers = (PFNGLDELETEFRAMEBUFFERSPROC) wglGetProcAddress("glDeleteFramebuffers");
             glGenFramebuffers = (PFNGLGENFRAMEBUFFERSPROC) wglGetProcAddress("glGenFramebuffers");
             glCheckFramebufferStatus = (PFNGLCHECKFRAMEBUFFERSTATUSPROC) wglGetProcAddress("glCheckFramebufferStatus");
-            glFramebufferTexture1D = (PFNGLFRAMEBUFFERTEXTURE1DPROC) wglGetProcAddress("glFramebufferTexture1D");
+            ///glFramebufferTexture1D = (PFNGLFRAMEBUFFERTEXTURE1DPROC) wglGetProcAddress("glFramebufferTexture1D");
             glFramebufferTexture2D = (PFNGLFRAMEBUFFERTEXTURE2DPROC) wglGetProcAddress("glFramebufferTexture2D");
-            glFramebufferTexture3D = (PFNGLFRAMEBUFFERTEXTURE3DPROC) wglGetProcAddress("glFramebufferTexture3D");
+            //glFramebufferTexture3D = (PFNGLFRAMEBUFFERTEXTURE3DPROC) wglGetProcAddress("glFramebufferTexture3D");
             glFramebufferRenderbuffer = (PFNGLFRAMEBUFFERRENDERBUFFERPROC) wglGetProcAddress("glFramebufferRenderbuffer");
             glGetFramebufferAttachmentParameteriv = (PFNGLGETFRAMEBUFFERATTACHMENTPARAMETERIVPROC) wglGetProcAddress("glGetFramebufferAttachmentParameteriv");
             glGenerateMipmap = (PFNGLGENERATEMIPMAPPROC) wglGetProcAddress("glGenerateMipmap");
@@ -845,9 +851,9 @@ static bool glew_dynamic_binding()
             glDeleteFramebuffers = (PFNGLDELETEFRAMEBUFFERSPROC) wglGetProcAddress("glDeleteFramebuffersEXT");
             glGenFramebuffers = (PFNGLGENFRAMEBUFFERSPROC) wglGetProcAddress("glGenFramebuffersEXT");
             glCheckFramebufferStatus = (PFNGLCHECKFRAMEBUFFERSTATUSPROC) wglGetProcAddress("glCheckFramebufferStatusEXT");
-            glFramebufferTexture1D = (PFNGLFRAMEBUFFERTEXTURE1DPROC) wglGetProcAddress("glFramebufferTexture1DEXT");
+            //glFramebufferTexture1D = (PFNGLFRAMEBUFFERTEXTURE1DPROC) wglGetProcAddress("glFramebufferTexture1DEXT");
             glFramebufferTexture2D = (PFNGLFRAMEBUFFERTEXTURE2DPROC) wglGetProcAddress("glFramebufferTexture2DEXT");
-            glFramebufferTexture3D = (PFNGLFRAMEBUFFERTEXTURE3DPROC) wglGetProcAddress("glFramebufferTexture3DEXT");
+            //glFramebufferTexture3D = (PFNGLFRAMEBUFFERTEXTURE3DPROC) wglGetProcAddress("glFramebufferTexture3DEXT");
             glFramebufferRenderbuffer = (PFNGLFRAMEBUFFERRENDERBUFFERPROC) wglGetProcAddress("glFramebufferRenderbufferEXT");
             glGetFramebufferAttachmentParameteriv = (PFNGLGETFRAMEBUFFERATTACHMENTPARAMETERIVPROC) wglGetProcAddress("glGetFramebufferAttachmentParameterivEXT");
             glGenerateMipmap = (PFNGLGENERATEMIPMAPPROC) wglGetProcAddress("glGenerateMipmapEXT");
@@ -867,7 +873,7 @@ static bool glew_dynamic_binding()
 bool GLViewImpl::initGlew()
 {
 #if (CC_TARGET_PLATFORM != CC_PLATFORM_MAC)
-    GLenum GlewInitResult = glewInit();
+   /* GLenum GlewInitResult = glewInit();
     if (GLEW_OK != GlewInitResult)
     {
         MessageBox((char *)glewGetErrorString(GlewInitResult), "OpenGL error");
@@ -890,7 +896,7 @@ bool GLViewImpl::initGlew()
     else
     {
         log("OpenGL 2.0 not supported");
-    }
+    }*/
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
     if(glew_dynamic_binding() == false)
