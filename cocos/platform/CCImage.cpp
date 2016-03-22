@@ -674,7 +674,7 @@ bool Image::isASTC(const unsigned char *data, ssize_t dataLen)
 {
     ASTCTexHeader *header = (ASTCTexHeader *)data;
     
-    const unsigned char magic[] = { 0x5C, 0xA1, 0xAB, 0x13 };
+    const unsigned char magic[] = { 0x13, 0xAB, 0xA1, 0x5C };
     if (memcmp(header->id, magic, 4)) {
         return false;
     }
@@ -2208,6 +2208,8 @@ bool Image::initWithASTCData(const unsigned char *data, ssize_t dataLen)
         _numberOfMipmaps = 0;
         _mipmaps[0].address = (unsigned char *)_data;
         _mipmaps[0].len = _dataLen;
+
+		_hasPremultipliedAlpha = false;
         
         return true;
     }
