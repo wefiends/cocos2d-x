@@ -65,7 +65,6 @@ THE SOFTWARE.
 #pragma comment(lib,"libjpeg-2015.lib")
 #pragma comment(lib,"libtiff-2015.lib")
 #pragma comment(lib,"glfw3-2015.lib")
-#pragma comment(lib,"libchipmunk-2015.lib")
 #else
 #pragma comment(lib,"libpng.lib")
 #pragma comment(lib,"libjpeg.lib")
