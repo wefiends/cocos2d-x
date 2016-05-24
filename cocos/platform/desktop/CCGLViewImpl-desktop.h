@@ -48,7 +48,13 @@ THE SOFTWARE.
 #ifndef GLFW_EXPOSE_NATIVE_COCOA
 #define GLFW_EXPOSE_NATIVE_COCOA
 #endif
+#define Rect MacRect
+#define Pattern MacPattern
+#define Size MacSize
 #include "glfw3native.h"
+#undef Rect
+#undef Pattern
+#undef Size
 #endif // #if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
 
 NS_CC_BEGIN
