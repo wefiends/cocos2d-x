@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		01344C141CF5764400723ECD /* stb_image.h in Headers */ = {isa = PBXBuildFile; fileRef = 01344C131CF5764400723ECD /* stb_image.h */; };
+		01344C151CF5764400723ECD /* stb_image.h in Headers */ = {isa = PBXBuildFile; fileRef = 01344C131CF5764400723ECD /* stb_image.h */; };
+		01344C161CF5764400723ECD /* stb_image.h in Headers */ = {isa = PBXBuildFile; fileRef = 01344C131CF5764400723ECD /* stb_image.h */; };
 		0C261F281BE7528900707478 /* Light3DReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C261F261BE7528900707478 /* Light3DReader.cpp */; };
 		0C261F291BE7528900707478 /* Light3DReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0C261F261BE7528900707478 /* Light3DReader.cpp */; };
 		0C261F2A1BE7528900707478 /* Light3DReader.h in Headers */ = {isa = PBXBuildFile; fileRef = 0C261F271BE7528900707478 /* Light3DReader.h */; };
@@ -5661,6 +5664,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		01344C131CF5764400723ECD /* stb_image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stb_image.h; sourceTree = "<group>"; };
 		0634A4C5194B19E400E608AF /* CCActionTimeline.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CCActionTimeline.cpp; sourceTree = "<group>"; };
 		0634A4C6194B19E400E608AF /* CCActionTimeline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCActionTimeline.h; sourceTree = "<group>"; };
 		0634A4C7194B19E400E608AF /* CCActionTimelineCache.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CCActionTimelineCache.cpp; sourceTree = "<group>"; };
@@ -9837,6 +9841,7 @@
 				50ABBF2A1926664700A911A9 /* CCSAXParser.h */,
 				50ABBF2B1926664700A911A9 /* CCThread.cpp */,
 				50ABBF2C1926664700A911A9 /* CCThread.h */,
+				01344C131CF5764400723ECD /* stb_image.h */,
 			);
 			name = platform;
 			path = ../cocos/platform;
@@ -11924,6 +11929,7 @@
 				B60C5BD619AC68B10056FBDE /* CCBillBoard.h in Headers */,
 				50864CD01C7BC1B100B3BAB1 /* cpShape.h in Headers */,
 				15AE1BA419AADFDF00C27E9E /* UILayoutManager.h in Headers */,
+				01344C141CF5764400723ECD /* stb_image.h in Headers */,
 				2962D5E81C61CBF9004821A3 /* CCUITextInput.h in Headers */,
 				1A01C69418F57BE800EFE3A6 /* CCFloat.h in Headers */,
 				50864CB81C7BC1B000B3BAB1 /* cpMarch.h in Headers */,
@@ -13189,6 +13195,7 @@
 				507B40AC1C31BDD30067B53E /* atitc.h in Headers */,
 				507B40AD1C31BDD30067B53E /* CCPUSimpleSpline.h in Headers */,
 				507B40AE1C31BDD30067B53E /* btJacobianEntry.h in Headers */,
+				01344C161CF5764400723ECD /* stb_image.h in Headers */,
 				507B40AF1C31BDD30067B53E /* b2ContactSolver.h in Headers */,
 				507B40B01C31BDD30067B53E /* CCPUOnExpireObserver.h in Headers */,
 				507B40B11C31BDD30067B53E /* CCActionNode.h in Headers */,
@@ -14230,6 +14237,7 @@
 				50ABBE221925AB6F00A911A9 /* atitc.h in Headers */,
 				B665E3E11AA80A6600DDB1C5 /* CCPUSimpleSpline.h in Headers */,
 				B6CAB3C81AF9AA1A00B9B856 /* btJacobianEntry.h in Headers */,
+				01344C151CF5764400723ECD /* stb_image.h in Headers */,
 				15AE1AB719AAD40300C27E9E /* b2ContactSolver.h in Headers */,
 				B665E3451AA80A6500DDB1C5 /* CCPUOnExpireObserver.h in Headers */,
 				15AE193319AAD35100C27E9E /* CCActionNode.h in Headers */,

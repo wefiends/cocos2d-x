@@ -54,9 +54,17 @@ extern "C"
     }
 #endif
 #endif
-
+    
 #if CC_USE_PNG
 #include "png.h"
+#define STBI_ONLY_JPEG
+#define STBI_ONLY_PNG
+#define STBI_NO_STDIO
+#define STB_IMAGE_IMPLEMENTATION
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#define STBI_NEON
+#endif
+#include "stb_image.h"
 #endif //CC_USE_PNG
 
 #if CC_USE_TIFF
@@ -951,94 +959,45 @@ bool Image::encodeWithWIC(const std::string& filePath, bool isToRGB, GUID contai
 
 bool Image::initWithJpgData(const unsigned char * data, ssize_t dataLen)
 {
-#if CC_USE_WIC
-    return decodeWithWIC(data, dataLen);
-#elif CC_USE_JPEG
-    /* these are standard libjpeg structures for reading(decompression) */
-    struct jpeg_decompress_struct cinfo;
-    /* We use our private extension JPEG error handler.
-     * Note that this struct must live as long as the main JPEG parameter
-     * struct, to avoid dangling-pointer problems.
-     */
-    struct MyErrorMgr jerr;
-    /* libjpeg data structure for storing one row, that is, scanline of an image */
-    JSAMPROW row_pointer[1] = {0};
-    unsigned long location = 0;
-
-    bool ret = false;
-    do 
+#if CC_USE_JPEG
+    int width, height, comp;
+    _data = stbi_load_from_memory(data, dataLen, &width, &height, &comp, 0);
+    if (!_data) {
+        return false;
+    }
+    _dataLen = width * height * comp;
+    _width = width;
+    _height = height;
+    
+    switch (comp)
     {
-        /* We set up the normal JPEG error routines, then override error_exit. */
-        cinfo.err = jpeg_std_error(&jerr.pub);
-        jerr.pub.error_exit = myErrorExit;
-        /* Establish the setjmp return context for MyErrorExit to use. */
-        if (setjmp(jerr.setjmp_buffer))
-        {
-            /* If we get here, the JPEG code has signaled an error.
-             * We need to clean up the JPEG object, close the input file, and return.
-             */
-            jpeg_destroy_decompress(&cinfo);
-            break;
-        }
-
-        /* setup decompression process and source, then read JPEG header */
-        jpeg_create_decompress( &cinfo );
-
-#ifndef CC_TARGET_QT5
-        jpeg_mem_src(&cinfo, const_cast<unsigned char*>(data), dataLen);
-#endif /* CC_TARGET_QT5 */
-
-        /* reading the image header which contains image information */
-#if (JPEG_LIB_VERSION >= 90)
-        // libjpeg 0.9 adds stricter types.
-        jpeg_read_header(&cinfo, TRUE);
-#else
-        jpeg_read_header(&cinfo, TRUE);
-#endif
-
-        // we only support RGB or grayscale
-        if (cinfo.jpeg_color_space == JCS_GRAYSCALE)
-        {
+        case 1:
             _renderFormat = Texture2D::PixelFormat::I8;
-        }else
-        {
-            cinfo.out_color_space = JCS_RGB;
+            break;
+        case 2:
+            _renderFormat = Texture2D::PixelFormat::AI88;
+            break;
+        case 3:
             _renderFormat = Texture2D::PixelFormat::RGB888;
-        }
-
-        /* Start decompression jpeg here */
-        jpeg_start_decompress( &cinfo );
-
-        /* init image info */
-        _width  = cinfo.output_width;
-        _height = cinfo.output_height;
+            break;
+        case 4:
+            _renderFormat = Texture2D::PixelFormat::RGBA8888;
+            break;
+        default:
+            break;
+    }
+    
+    // premultiplied alpha for RGBA8888
+    if (comp == 4)
+    {
+        premultipliedAlpha();
+    }
+    else
+    {
         _hasPremultipliedAlpha = false;
-
-        _dataLen = cinfo.output_width*cinfo.output_height*cinfo.output_components;
-        _data = static_cast<unsigned char*>(malloc(_dataLen * sizeof(unsigned char)));
-        CC_BREAK_IF(! _data);
-
-        /* now actually read the jpeg into the raw buffer */
-        /* read one scan line at a time */
-        while (cinfo.output_scanline < cinfo.output_height)
-        {
-            row_pointer[0] = _data + location;
-            location += cinfo.output_width*cinfo.output_components;
-            jpeg_read_scanlines(&cinfo, row_pointer, 1);
-        }
-
-    /* When read image file with broken data, jpeg_finish_decompress() may cause error.
-     * Besides, jpeg_destroy_decompress() shall deallocate and release all memory associated
-     * with the decompression object.
-     * So it doesn't need to call jpeg_finish_decompress().
-     */
-    //jpeg_finish_decompress( &cinfo );
-        jpeg_destroy_decompress( &cinfo );
-        /* wrap up decompression, destroy objects, free pointers and close open files */        
-        ret = true;
-    } while (0);
-
-    return ret;
+    }
+    
+    return true;
 #else
     CCLOG("jpeg is not enabled, please enable it in ccConfig.h");
     return false;
@@ -1047,155 +1006,45 @@ bool Image::initWithJpgData(const unsigned char * data, ssize_t dataLen)
 
 bool Image::initWithPngData(const unsigned char * data, ssize_t dataLen)
 {
-#if CC_USE_WIC
-    return decodeWithWIC(data, dataLen);
-#elif CC_USE_PNG
-    // length of bytes to check if it is a valid png file
-#define PNGSIGSIZE  8
-    bool ret = false;
-    png_byte        header[PNGSIGSIZE]   = {0}; 
-    png_structp     png_ptr     =   0;
-    png_infop       info_ptr    = 0;
-
-    do 
+#if CC_USE_PNG
+    int width, height, comp;
+    _data = stbi_load_from_memory(data, dataLen, &width, &height, &comp, 0);
+    if (!_data) {
+        return false;
+    }
+    _dataLen = width * height * comp;
+    _width = width;
+    _height = height;
+    
+    switch (comp)
     {
-        // png header len is 8 bytes
-        CC_BREAK_IF(dataLen < PNGSIGSIZE);
-
-        // check the data is png or not
-        memcpy(header, data, PNGSIGSIZE);
-        CC_BREAK_IF(png_sig_cmp(header, 0, PNGSIGSIZE));
-
-        // init png_struct
-        png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, 0, 0, 0);
-        CC_BREAK_IF(! png_ptr);
-
-        // init png_info
-        info_ptr = png_create_info_struct(png_ptr);
-        CC_BREAK_IF(!info_ptr);
-
-#if (CC_TARGET_PLATFORM != CC_PLATFORM_BADA && CC_TARGET_PLATFORM != CC_PLATFORM_NACL && CC_TARGET_PLATFORM != CC_PLATFORM_TIZEN)
-        CC_BREAK_IF(setjmp(png_jmpbuf(png_ptr)));
-#endif
-
-        // set the read call back function
-        tImageSource imageSource;
-        imageSource.data    = (unsigned char*)data;
-        imageSource.size    = dataLen;
-        imageSource.offset  = 0;
-        png_set_read_fn(png_ptr, &imageSource, pngReadCallback);
-
-        // read png header info
-
-        // read png file info
-        png_read_info(png_ptr, info_ptr);
-
-        _width = png_get_image_width(png_ptr, info_ptr);
-        _height = png_get_image_height(png_ptr, info_ptr);
-        png_byte bit_depth = png_get_bit_depth(png_ptr, info_ptr);
-        png_uint_32 color_type = png_get_color_type(png_ptr, info_ptr);
-
-        //CCLOG("color type %u", color_type);
-
-        // force palette images to be expanded to 24-bit RGB
-        // it may include alpha channel
-        if (color_type == PNG_COLOR_TYPE_PALETTE)
-        {
-            png_set_palette_to_rgb(png_ptr);
-        }
-        // low-bit-depth grayscale images are to be expanded to 8 bits
-        if (color_type == PNG_COLOR_TYPE_GRAY && bit_depth < 8)
-        {
-            bit_depth = 8;
-            png_set_expand_gray_1_2_4_to_8(png_ptr);
-        }
-        // expand any tRNS chunk data into a full alpha channel
-        if (png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS))
-        {
-            png_set_tRNS_to_alpha(png_ptr);
-        }  
-        // reduce images with 16-bit samples to 8 bits
-        if (bit_depth == 16)
-        {
-            png_set_strip_16(png_ptr);            
-        } 
-
-        // Expanded earlier for grayscale, now take care of palette and rgb
-        if (bit_depth < 8)
-        {
-            png_set_packing(png_ptr);
-        }
-        // update info
-        png_read_update_info(png_ptr, info_ptr);
-        bit_depth = png_get_bit_depth(png_ptr, info_ptr);
-        color_type = png_get_color_type(png_ptr, info_ptr);
-
-        switch (color_type)
-        {
-        case PNG_COLOR_TYPE_GRAY:
+        case 1:
             _renderFormat = Texture2D::PixelFormat::I8;
             break;
-        case PNG_COLOR_TYPE_GRAY_ALPHA:
+        case 2:
             _renderFormat = Texture2D::PixelFormat::AI88;
             break;
-        case PNG_COLOR_TYPE_RGB:
+        case 3:
             _renderFormat = Texture2D::PixelFormat::RGB888;
             break;
-        case PNG_COLOR_TYPE_RGB_ALPHA:
+        case 4:
             _renderFormat = Texture2D::PixelFormat::RGBA8888;
             break;
         default:
             break;
-        }
-
-        // read png data
-        png_size_t rowbytes;
-        png_bytep* row_pointers = (png_bytep*)malloc( sizeof(png_bytep) * _height );
-
-        rowbytes = png_get_rowbytes(png_ptr, info_ptr);
-
-        _dataLen = rowbytes * _height;
-        _data = static_cast<unsigned char*>(malloc(_dataLen * sizeof(unsigned char)));
-        if (!_data)
-        {
-            if (row_pointers != nullptr)
-            {
-                free(row_pointers);
-            }
-            break;
-        }
-
-        for (unsigned short i = 0; i < _height; ++i)
-        {
-            row_pointers[i] = _data + i*rowbytes;
-        }
-        png_read_image(png_ptr, row_pointers);
-
-        png_read_end(png_ptr, nullptr);
-
-        // premultiplied alpha for RGBA8888
-        if (color_type == PNG_COLOR_TYPE_RGB_ALPHA)
-        {
-            premultipliedAlpha();
-        }
-        else
-        {
-            _hasPremultipliedAlpha = false;
-        }
-
-        if (row_pointers != nullptr)
-        {
-            free(row_pointers);
-        }
-
-        ret = true;
-    } while (0);
-
-    if (png_ptr)
-    {
-        png_destroy_read_struct(&png_ptr, (info_ptr) ? &info_ptr : 0, 0);
     }
-    return ret;
+    
+    // premultiplied alpha for RGBA8888
+    if (comp == 4)
+    {
+        premultipliedAlpha();
+    }
+    else
+    {
+        _hasPremultipliedAlpha = false;
+    }
+    
+    return true;
 #else
     CCLOG("png is not enabled, please enable it in ccConfig.h");
     return false;
