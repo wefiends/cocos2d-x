@@ -80,10 +80,6 @@ public:
         JPG,
         //! PNG
         PNG,
-        //! TIFF
-        TIFF,
-        //! WebP
-        WEBP,
         //! PVR
         PVR,
         //! ETC
@@ -163,8 +159,6 @@ protected:
 #endif
     bool initWithJpgData(const unsigned char *  data, ssize_t dataLen);
     bool initWithPngData(const unsigned char * data, ssize_t dataLen);
-    bool initWithTiffData(const unsigned char * data, ssize_t dataLen);
-    bool initWithWebpData(const unsigned char * data, ssize_t dataLen);
     bool initWithPVRData(const unsigned char * data, ssize_t dataLen);
     bool initWithPVRv2Data(const unsigned char * data, ssize_t dataLen);
     bool initWithPVRv3Data(const unsigned char * data, ssize_t dataLen);

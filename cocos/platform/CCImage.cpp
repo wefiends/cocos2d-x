@@ -56,7 +56,6 @@ extern "C"
 #endif
     
 #if CC_USE_PNG
-#include "png.h"
 #define STBI_ONLY_JPEG
 #define STBI_ONLY_PNG
 #define STBI_NO_STDIO
@@ -65,26 +64,22 @@ extern "C"
 #define STBI_NEON
 #endif
 #include "stb_image.h"
+    
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include "stb_image_write.h"
 #endif //CC_USE_PNG
-
-#if CC_USE_TIFF
-#include "tiffio.h"
-#endif //CC_USE_TIFF
 
 #include "base/etc1.h"
     
 #if CC_USE_JPEG
-#include "jpeglib.h"
+#define TJE_IMPLEMENTATION
+#include "tiny_jpeg.h"
 #endif // CC_USE_JPEG
 }
 #include "base/s3tc.h"
 #include "base/atitc.h"
 #include "base/pvr.h"
 #include "base/TGAlib.h"
-
-#if CC_USE_WEBP
-#include "decode.h"
-#endif // CC_USE_WEBP
 
 #include "base/ccMacros.h"
 #include "platform/CCCommon.h"
@@ -444,33 +439,6 @@ namespace {
 
 //////////////////////////////////////////////////////////////////////////
 
-namespace
-{
-    typedef struct 
-    {
-        const unsigned char * data;
-        ssize_t size;
-        int offset;
-    }tImageSource;
- 
-#ifdef CC_USE_PNG
-    static void pngReadCallback(png_structp png_ptr, png_bytep data, png_size_t length)
-    {
-        tImageSource* isource = (tImageSource*)png_get_io_ptr(png_ptr);
-        
-        if((int)(isource->offset + length) <= isource->size)
-        {
-            memcpy(data, isource->data+isource->offset, length);
-            isource->offset += length;
-        }
-        else
-        {
-            png_error(png_ptr, "pngReaderCallback failed");
-        }
-    }
-#endif //CC_USE_PNG
-}
-
 Texture2D::PixelFormat getDevicePixelFormat(Texture2D::PixelFormat format)
 {
     switch (format) {
@@ -587,12 +555,6 @@ bool Image::initWithImageData(const unsigned char * data, ssize_t dataLen)
         case Format::JPG:
             ret = initWithJpgData(unpackedData, unpackedLen);
             break;
-        case Format::TIFF:
-            ret = initWithTiffData(unpackedData, unpackedLen);
-            break;
-        case Format::WEBP:
-            ret = initWithWebpData(unpackedData, unpackedLen);
-            break;
         case Format::PVR:
             ret = initWithPVRData(unpackedData, unpackedLen);
             break;
@@ -701,34 +663,6 @@ bool Image::isJpg(const unsigned char * data, ssize_t dataLen)
     return memcmp(data, JPG_SOI, 2) == 0;
 }
 
-bool Image::isTiff(const unsigned char * data, ssize_t dataLen)
-{
-    if (dataLen <= 4)
-    {
-        return false;
-    }
-
-    static const char* TIFF_II = "II";
-    static const char* TIFF_MM = "MM";
-
-    return (memcmp(data, TIFF_II, 2) == 0 && *(static_cast<const unsigned char*>(data) + 2) == 42 && *(static_cast<const unsigned char*>(data) + 3) == 0) ||
-        (memcmp(data, TIFF_MM, 2) == 0 && *(static_cast<const unsigned char*>(data) + 2) == 0 && *(static_cast<const unsigned char*>(data) + 3) == 42);
-}
-
-bool Image::isWebp(const unsigned char * data, ssize_t dataLen)
-{
-    if (dataLen <= 12)
-    {
-        return false;
-    }
-
-    static const char* WEBP_RIFF = "RIFF";
-    static const char* WEBP_WEBP = "WEBP";
-
-    return memcmp(data, WEBP_RIFF, 4) == 0 
-        && memcmp(static_cast<const unsigned char*>(data) + 8, WEBP_WEBP, 4) == 0;
-}
-
 bool Image::isPvr(const unsigned char * data, ssize_t dataLen)
 {
     if (static_cast<size_t>(dataLen) < sizeof(PVRv2TexHeader) || static_cast<size_t>(dataLen) < sizeof(PVRv3TexHeader))
@@ -751,14 +685,6 @@ Image::Format Image::detectFormat(const unsigned char * data, ssize_t dataLen)
     else if (isJpg(data, dataLen))
     {
         return Format::JPG;
-    }
-    else if (isTiff(data, dataLen))
-    {
-        return Format::TIFF;
-    }
-    else if (isWebp(data, dataLen))
-    {
-        return Format::WEBP;
     }
     else if (isPvr(data, dataLen))
     {
@@ -799,65 +725,6 @@ bool Image::hasAlpha()
 bool Image::isCompressed()
 {
     return Texture2D::getPixelFormatInfoMap().at(_renderFormat).compressed;
-}
-
-namespace
-{
-/*
- * ERROR HANDLING:
- *
- * The JPEG library's standard error handler (jerror.c) is divided into
- * several "methods" which you can override individually.  This lets you
- * adjust the behavior without duplicating a lot of code, which you might
- * have to update with each future release.
- *
- * We override the "error_exit" method so that control is returned to the
- * library's caller when a fatal error occurs, rather than calling exit()
- * as the standard error_exit method does.
- *
- * We use C's setjmp/longjmp facility to return control.  This means that the
- * routine which calls the JPEG library must first execute a setjmp() call to
- * establish the return point.  We want the replacement error_exit to do a
- * longjmp().  But we need to make the setjmp buffer accessible to the
- * error_exit routine.  To do this, we make a private extension of the
- * standard JPEG error handler object.  (If we were using C++, we'd say we
- * were making a subclass of the regular error handler.)
- *
- * Here's the extended error handler struct:
- */
-#if CC_USE_JPEG
-    struct MyErrorMgr
-    {
-        struct jpeg_error_mgr pub;  /* "public" fields */
-        jmp_buf setjmp_buffer;  /* for return to caller */
-    };
-    
-    typedef struct MyErrorMgr * MyErrorPtr;
-    
-    /*
-     * Here's the routine that will replace the standard error_exit method:
-     */
-    
-    METHODDEF(void)
-    myErrorExit(j_common_ptr cinfo)
-    {
-        /* cinfo->err really points to a MyErrorMgr struct, so coerce pointer */
-        MyErrorPtr myerr = (MyErrorPtr) cinfo->err;
-        
-        /* Always display the message. */
-        /* We could postpone this until after returning, if we chose. */
-        /* internal message function can't show error message in some platforms, so we rewrite it here.
-         * edit it if has version conflict.
-         */
-        //(*cinfo->err->output_message) (cinfo);
-        char buffer[JMSG_LENGTH_MAX];
-        (*cinfo->err->format_message) (cinfo, buffer);
-        CCLOG("jpeg error: %s", buffer);
-        
-        /* Return control to the setjmp point */
-        longjmp(myerr->setjmp_buffer, 1);
-    }
-#endif // CC_USE_JPEG
 }
 
 #if CC_USE_WIC
@@ -1049,186 +916,6 @@ bool Image::initWithPngData(const unsigned char * data, ssize_t dataLen)
     CCLOG("png is not enabled, please enable it in ccConfig.h");
     return false;
 #endif //CC_USE_PNG
-}
-
-#if CC_USE_TIFF
-namespace
-{
-    static tmsize_t tiffReadProc(thandle_t fd, void* buf, tmsize_t size)
-    {
-        tImageSource* isource = (tImageSource*)fd;
-        uint8* ma;
-        uint64 mb;
-        unsigned long n;
-        unsigned long o;
-        tmsize_t p;
-        ma=(uint8*)buf;
-        mb=size;
-        p=0;
-        while (mb>0)
-        {
-            n=0x80000000UL;
-            if ((uint64)n>mb)
-                n=(unsigned long)mb;
-            
-            
-            if ((int)(isource->offset + n) <= isource->size)
-            {
-                memcpy(ma, isource->data+isource->offset, n);
-                isource->offset += n;
-                o = n;
-            }
-            else
-            {
-                return 0;
-            }
-            
-            ma+=o;
-            mb-=o;
-            p+=o;
-            if (o!=n)
-            {
-                break;
-            }
-        }
-        return p;
-    }
-    
-    static tmsize_t tiffWriteProc(thandle_t fd, void* buf, tmsize_t size)
-    {
-        CC_UNUSED_PARAM(fd);
-        CC_UNUSED_PARAM(buf);
-        CC_UNUSED_PARAM(size);
-        return 0;
-    }
-    
-    
-    static uint64 tiffSeekProc(thandle_t fd, uint64 off, int whence)
-    {
-        tImageSource* isource = (tImageSource*)fd;
-        uint64 ret = -1;
-        do
-        {
-            if (whence == SEEK_SET)
-            {
-                CC_BREAK_IF(off >= (uint64)isource->size);
-                ret = isource->offset = (uint32)off;
-            }
-            else if (whence == SEEK_CUR)
-            {
-                CC_BREAK_IF(isource->offset + off >= (uint64)isource->size);
-                ret = isource->offset += (uint32)off;
-            }
-            else if (whence == SEEK_END)
-            {
-                CC_BREAK_IF(off >= (uint64)isource->size);
-                ret = isource->offset = (uint32)(isource->size-1 - off);
-            }
-            else
-            {
-                CC_BREAK_IF(off >= (uint64)isource->size);
-                ret = isource->offset = (uint32)off;
-            }
-        } while (0);
-        
-        return ret;
-    }
-    
-    static uint64 tiffSizeProc(thandle_t fd)
-    {
-        tImageSource* imageSrc = (tImageSource*)fd;
-        return imageSrc->size;
-    }
-    
-    static int tiffCloseProc(thandle_t fd)
-    {
-        CC_UNUSED_PARAM(fd);
-        return 0;
-    }
-    
-    static int tiffMapProc(thandle_t fd, void** base, toff_t* size)
-    {
-        CC_UNUSED_PARAM(fd);
-        CC_UNUSED_PARAM(base);
-        CC_UNUSED_PARAM(size);
-        return 0;
-    }
-    
-    static void tiffUnmapProc(thandle_t fd, void* base, toff_t size)
-    {
-        CC_UNUSED_PARAM(fd);
-        CC_UNUSED_PARAM(base);
-        CC_UNUSED_PARAM(size);
-    }
-}
-#endif // CC_USE_TIFF
-
-bool Image::initWithTiffData(const unsigned char * data, ssize_t dataLen)
-{
-#if CC_USE_WIC
-    return decodeWithWIC(data, dataLen);
-#elif CC_USE_TIFF
-    bool ret = false;
-    do 
-    {
-        // set the read call back function
-        tImageSource imageSource;
-        imageSource.data    = data;
-        imageSource.size    = dataLen;
-        imageSource.offset  = 0;
-
-        TIFF* tif = TIFFClientOpen("file.tif", "r", (thandle_t)&imageSource, 
-            tiffReadProc, tiffWriteProc,
-            tiffSeekProc, tiffCloseProc, tiffSizeProc,
-            tiffMapProc,
-            tiffUnmapProc);
-
-        CC_BREAK_IF(nullptr == tif);
-
-        uint32 w = 0, h = 0;
-        uint16 bitsPerSample = 0, samplePerPixel = 0, planarConfig = 0;
-        size_t npixels = 0;
-        
-        TIFFGetField(tif, TIFFTAG_IMAGEWIDTH, &w);
-        TIFFGetField(tif, TIFFTAG_IMAGELENGTH, &h);
-        TIFFGetField(tif, TIFFTAG_BITSPERSAMPLE, &bitsPerSample);
-        TIFFGetField(tif, TIFFTAG_SAMPLESPERPIXEL, &samplePerPixel);
-        TIFFGetField(tif, TIFFTAG_PLANARCONFIG, &planarConfig);
-
-        npixels = w * h;
-        
-        _renderFormat = Texture2D::PixelFormat::RGBA8888;
-        _width = w;
-        _height = h;
-
-        _dataLen = npixels * sizeof (uint32);
-        _data = static_cast<unsigned char*>(malloc(_dataLen * sizeof(unsigned char)));
-
-        uint32* raster = (uint32*) _TIFFmalloc(npixels * sizeof (uint32));
-        if (raster != nullptr) 
-        {
-           if (TIFFReadRGBAImageOriented(tif, w, h, raster, ORIENTATION_TOPLEFT, 0))
-           {
-                /* the raster data is pre-multiplied by the alpha component 
-                   after invoking TIFFReadRGBAImageOriented*/
-                _hasPremultipliedAlpha = true;
-
-               memcpy(_data, raster, npixels*sizeof (uint32));
-           }
-
-          _TIFFfree(raster);
-        }
-        
-
-        TIFFClose(tif);
-
-        ret = true;
-    } while (0);
-    return ret;
-#else
-    CCLOG("tiff is not enabled, please enable it in ccConfig.h");
-    return false;
-#endif //CC_USE_TIFF
 }
 
 namespace
@@ -2070,55 +1757,6 @@ bool Image::initWithPVRData(const unsigned char * data, ssize_t dataLen)
     return initWithPVRv2Data(data, dataLen) || initWithPVRv3Data(data, dataLen);
 }
 
-bool Image::initWithWebpData(const unsigned char * data, ssize_t dataLen)
-{
-#if CC_USE_WEBP
-    bool ret = false;
-
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-    CCLOG("WEBP image format not supported on WinRT or WP8");
-#else
-    do
-    {
-        WebPDecoderConfig config;
-        if (WebPInitDecoderConfig(&config) == 0) break;
-        if (WebPGetFeatures(static_cast<const uint8_t*>(data), dataLen, &config.input) != VP8_STATUS_OK) break;
-        if (config.input.width == 0 || config.input.height == 0) break;
-        
-        config.output.colorspace = config.input.has_alpha?MODE_rgbA:MODE_RGB;
-        _renderFormat = config.input.has_alpha?Texture2D::PixelFormat::RGBA8888:Texture2D::PixelFormat::RGB888;
-        _width    = config.input.width;
-        _height   = config.input.height;
-        
-        //we ask webp to give data with premultiplied alpha
-        _hasPremultipliedAlpha = (config.input.has_alpha != 0);
-        
-        _dataLen = _width * _height * (config.input.has_alpha?4:3);
-        _data = static_cast<unsigned char*>(malloc(_dataLen * sizeof(unsigned char)));
-        
-        config.output.u.RGBA.rgba = static_cast<uint8_t*>(_data);
-        config.output.u.RGBA.stride = _width * (config.input.has_alpha?4:3);
-        config.output.u.RGBA.size = _dataLen;
-        config.output.is_external_memory = 1;
-        
-        if (WebPDecode(static_cast<const uint8_t*>(data), dataLen, &config) != VP8_STATUS_OK)
-        {
-            free(_data);
-            _data = nullptr;
-            break;
-        }
-        
-        ret = true;
-    } while (0);
-#endif // (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-    return ret;
-#else 
-    CCLOG("webp is not enabled, please enable it in ccConfig.h");
-    return false;
-#endif // CC_USE_WEBP
-}
-
-
 bool Image::initWithRawData(const unsigned char * data, ssize_t dataLen, int width, int height, int bitsPerComponent, bool preMulti)
 {
     bool ret = false;
@@ -2175,148 +1813,47 @@ bool Image::saveToFile(const std::string& filename, bool isToRGB)
 
 bool Image::saveImageToPNG(const std::string& filePath, bool isToRGB)
 {
-#if CC_USE_WIC
-    return encodeWithWIC(filePath, isToRGB, GUID_ContainerFormatPng);
-#elif CC_USE_PNG
+#if CC_USE_PNG
     bool ret = false;
     do
     {
-        FILE *fp;
-        png_structp png_ptr;
-        png_infop info_ptr;
-        png_colorp palette;
-        png_bytep *row_pointers;
-
-        fp = fopen(FileUtils::getInstance()->getSuitableFOpen(filePath).c_str(), "wb");
-        CC_BREAK_IF(nullptr == fp);
-
-        png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
-
-        if (nullptr == png_ptr)
+        bool needToCopyPixels = false;
+        int bitsPerPixel = hasAlpha() ? 32 : 24;
+        if (isToRGB)
         {
-            fclose(fp);
-            break;
+            bitsPerPixel = 24;
         }
-
-        info_ptr = png_create_info_struct(png_ptr);
-        if (nullptr == info_ptr)
+        
+        int bytesPerRow    = (bitsPerPixel/8) * _width;
+        int myDataLength = bytesPerRow * _height;
+        
+        unsigned char *pixels    = _data;
+        
+        // The data has alpha channel, and want to save it with an RGB png file,
+        // or want to save as jpg,  remove the alpha channel.
+        if (hasAlpha() && bitsPerPixel == 24)
         {
-            fclose(fp);
-            png_destroy_write_struct(&png_ptr, nullptr);
-            break;
-        }
-#if (CC_TARGET_PLATFORM != CC_PLATFORM_BADA && CC_TARGET_PLATFORM != CC_PLATFORM_NACL && CC_TARGET_PLATFORM != CC_PLATFORM_TIZEN)
-        if (setjmp(png_jmpbuf(png_ptr)))
-        {
-            fclose(fp);
-            png_destroy_write_struct(&png_ptr, &info_ptr);
-            break;
-        }
-#endif
-        png_init_io(png_ptr, fp);
-
-        if (!isToRGB && hasAlpha())
-        {
-            png_set_IHDR(png_ptr, info_ptr, _width, _height, 8, PNG_COLOR_TYPE_RGB_ALPHA,
-                PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_BASE, PNG_FILTER_TYPE_BASE);
-        } 
-        else
-        {
-            png_set_IHDR(png_ptr, info_ptr, _width, _height, 8, PNG_COLOR_TYPE_RGB,
-                PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_BASE, PNG_FILTER_TYPE_BASE);
-        }
-
-        palette = (png_colorp)png_malloc(png_ptr, PNG_MAX_PALETTE_LENGTH * sizeof (png_color));
-        png_set_PLTE(png_ptr, info_ptr, palette, PNG_MAX_PALETTE_LENGTH);
-
-        png_write_info(png_ptr, info_ptr);
-
-        png_set_packing(png_ptr);
-
-        row_pointers = (png_bytep *)malloc(_height * sizeof(png_bytep));
-        if(row_pointers == nullptr)
-        {
-            fclose(fp);
-            png_destroy_write_struct(&png_ptr, &info_ptr);
-            break;
-        }
-
-        if (!hasAlpha())
-        {
-            for (int i = 0; i < (int)_height; i++)
+            pixels = new (std::nothrow) unsigned char[myDataLength];
+            
+            for (int i = 0; i < _height; ++i)
             {
-                row_pointers[i] = (png_bytep)_data + i * _width * 3;
+                for (int j = 0; j < _width; ++j)
+                {
+                    pixels[(i * _width + j) * 3] = _data[(i * _width + j) * 4];
+                    pixels[(i * _width + j) * 3 + 1] = _data[(i * _width + j) * 4 + 1];
+                    pixels[(i * _width + j) * 3 + 2] = _data[(i * _width + j) * 4 + 2];
+                }
             }
-
-            png_write_image(png_ptr, row_pointers);
-
-            free(row_pointers);
-            row_pointers = nullptr;
+            
+            needToCopyPixels = true;
         }
-        else
-        {
-            if (isToRGB)
-            {
-                unsigned char *tempData = static_cast<unsigned char*>(malloc(_width * _height * 3 * sizeof(unsigned char)));
-                if (nullptr == tempData)
-                {
-                    fclose(fp);
-                    png_destroy_write_struct(&png_ptr, &info_ptr);
-                    
-                    free(row_pointers);
-                    row_pointers = nullptr;
-                    break;
-                }
-
-                for (int i = 0; i < _height; ++i)
-                {
-                    for (int j = 0; j < _width; ++j)
-                    {
-                        tempData[(i * _width + j) * 3] = _data[(i * _width + j) * 4];
-                        tempData[(i * _width + j) * 3 + 1] = _data[(i * _width + j) * 4 + 1];
-                        tempData[(i * _width + j) * 3 + 2] = _data[(i * _width + j) * 4 + 2];
-                    }
-                }
-
-                for (int i = 0; i < (int)_height; i++)
-                {
-                    row_pointers[i] = (png_bytep)tempData + i * _width * 3;
-                }
-
-                png_write_image(png_ptr, row_pointers);
-
-                free(row_pointers);
-                row_pointers = nullptr;
-
-                if (tempData != nullptr)
-                {
-                    free(tempData);
-                }
-            } 
-            else
-            {
-                for (int i = 0; i < (int)_height; i++)
-                {
-                    row_pointers[i] = (png_bytep)_data + i * _width * 4;
-                }
-
-                png_write_image(png_ptr, row_pointers);
-
-                free(row_pointers);
-                row_pointers = nullptr;
-            }
+        if (stbi_write_png(filePath.c_str(), _width, _height, bitsPerPixel / 8, pixels, 0)) {
+            ret = true;
         }
-
-        png_write_end(png_ptr, info_ptr);
-
-        png_free(png_ptr, palette);
-        palette = nullptr;
-
-        png_destroy_write_struct(&png_ptr, &info_ptr);
-
-        fclose(fp);
-
-        ret = true;
+        
+        if (needToCopyPixels) {
+            delete [] pixels;
+        }
     } while (0);
     return ret;
 #else
@@ -2327,84 +1864,44 @@ bool Image::saveImageToPNG(const std::string& filePath, bool isToRGB)
 
 bool Image::saveImageToJPG(const std::string& filePath)
 {
-#if CC_USE_WIC
-    return encodeWithWIC(filePath, false, GUID_ContainerFormatJpeg);
-#elif CC_USE_JPEG
+#if CC_USE_JPEG
     bool ret = false;
     do 
     {
-        struct jpeg_compress_struct cinfo;
-        struct jpeg_error_mgr jerr;
-        FILE * outfile;                 /* target file */
-        JSAMPROW row_pointer[1];        /* pointer to JSAMPLE row[s] */
-        int     row_stride;          /* physical row width in image buffer */
-
-        cinfo.err = jpeg_std_error(&jerr);
-        /* Now we can initialize the JPEG compression object. */
-        jpeg_create_compress(&cinfo);
-
-        CC_BREAK_IF((outfile = fopen(FileUtils::getInstance()->getSuitableFOpen(filePath).c_str(), "wb")) == nullptr);
+        bool needToCopyPixels = false;
+        int bitsPerPixel = 24;
         
-        jpeg_stdio_dest(&cinfo, outfile);
-
-        cinfo.image_width = _width;    /* image width and height, in pixels */
-        cinfo.image_height = _height;
-        cinfo.input_components = 3;       /* # of color components per pixel */
-        cinfo.in_color_space = JCS_RGB;       /* colorspace of input image */
-
-        jpeg_set_defaults(&cinfo);
-        jpeg_set_quality(&cinfo, 90, TRUE);
+        int bytesPerRow    = (bitsPerPixel/8) * _width;
+        int myDataLength = bytesPerRow * _height;
         
-        jpeg_start_compress(&cinfo, TRUE);
-
-        row_stride = _width * 3; /* JSAMPLEs per row in image_buffer */
-
-        if (hasAlpha())
+        unsigned char *pixels    = _data;
+        
+        // The data has alpha channel, and want to save it with an RGB png file,
+        // or want to save as jpg,  remove the alpha channel.
+        if (hasAlpha() && bitsPerPixel == 24)
         {
-            unsigned char *tempData = static_cast<unsigned char*>(malloc(_width * _height * 3 * sizeof(unsigned char)));
-            if (nullptr == tempData)
-            {
-                jpeg_finish_compress(&cinfo);
-                jpeg_destroy_compress(&cinfo);
-                fclose(outfile);
-                break;
-            }
-
+            pixels = new (std::nothrow) unsigned char[myDataLength];
+            
             for (int i = 0; i < _height; ++i)
             {
                 for (int j = 0; j < _width; ++j)
-
                 {
-                    tempData[(i * _width + j) * 3] = _data[(i * _width + j) * 4];
-                    tempData[(i * _width + j) * 3 + 1] = _data[(i * _width + j) * 4 + 1];
-                    tempData[(i * _width + j) * 3 + 2] = _data[(i * _width + j) * 4 + 2];
+                    pixels[(i * _width + j) * 3] = _data[(i * _width + j) * 4];
+                    pixels[(i * _width + j) * 3 + 1] = _data[(i * _width + j) * 4 + 1];
+                    pixels[(i * _width + j) * 3 + 2] = _data[(i * _width + j) * 4 + 2];
                 }
             }
-
-            while (cinfo.next_scanline < cinfo.image_height)
-            {
-                row_pointer[0] = & tempData[cinfo.next_scanline * row_stride];
-                (void) jpeg_write_scanlines(&cinfo, row_pointer, 1);
-            }
-
-            if (tempData != nullptr)
-            {
-                free(tempData);
-            }
-        } 
-        else
-        {
-            while (cinfo.next_scanline < cinfo.image_height) {
-                row_pointer[0] = & _data[cinfo.next_scanline * row_stride];
-                (void) jpeg_write_scanlines(&cinfo, row_pointer, 1);
-            }
+            
+            needToCopyPixels = true;
         }
-
-        jpeg_finish_compress(&cinfo);
-        fclose(outfile);
-        jpeg_destroy_compress(&cinfo);
         
-        ret = true;
+        if (tje_encode_to_file(filePath.c_str(), _width, _height, 3, pixels)) {
+            ret = true;
+        }
+        
+        if (needToCopyPixels) {
+            delete [] pixels;
+        }
     } while (0);
     return ret;
 #else
