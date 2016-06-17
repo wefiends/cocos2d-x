@@ -28,7 +28,7 @@
 #include <vector>
 #include <locale>
 
-#include "tinyxml2/tinyxml2.h"
+#include "tinyxml2.h"
 #include "platform/CCFileUtils.h"
 #include "platform/CCApplication.h"
 #include "base/CCEventListenerTouch.h"
@@ -1691,7 +1691,7 @@ void RichText::handleTextRenderer(const std::string& text, const std::string& fo
     }
 }
     
-void RichText::handleImageRenderer(const std::string& filePath, const Color3B &color, GLubyte opacity, int width, int height, const std::string url)
+void RichText::handleImageRenderer(const std::string& filePath, const Color3B &color, GLubyte opacity, int width, int height, const std::string& url)
 {
     Sprite* imageRenderer = Sprite::create(filePath);
     if (imageRenderer)

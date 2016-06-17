@@ -1,4 +1,4 @@
-set(APP_NAME cpp_tests)
+set(APP_NAME cpp-tests)
 
 # Use same method as in cocos library
 cocos_find_package(CURL CURL REQUIRED)
@@ -35,7 +35,6 @@ set(TESTS_SRC
   Classes/BaseTest.cpp
   Classes/BillBoardTest/BillBoardTest.cpp
   Classes/BugsTest/Bug-CCDrawNode.cpp
-  Classes/BugsTest/Bug-PageViewLayout.cpp
   Classes/BugsTest/Bug-1159.cpp
   Classes/BugsTest/Bug-1174.cpp
   Classes/BugsTest/Bug-350.cpp
@@ -47,6 +46,7 @@ set(TESTS_SRC
   Classes/BugsTest/Bug-899.cpp
   Classes/BugsTest/Bug-914.cpp
   Classes/BugsTest/Bug-12847.cpp
+  Classes/BugsTest/Bug-15594.cpp
   Classes/BugsTest/Bug-Child.cpp
   Classes/BugsTest/BugsTest.cpp
   Classes/Camera3DTest/Camera3DTest.cpp

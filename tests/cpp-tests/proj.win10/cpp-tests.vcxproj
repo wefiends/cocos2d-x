@@ -302,8 +302,8 @@
     <ClInclude Include="..\Classes\Box2DTestBed\Tests\Web.h" />
     <ClInclude Include="..\Classes\Box2DTest\Box2dTest.h" />
     <ClInclude Include="..\Classes\BugsTest\Bug-12847.h" />
+    <ClInclude Include="..\Classes\BugsTest\Bug-15594.h" />
     <ClInclude Include="..\Classes\BugsTest\Bug-CCDrawNode.h" />
-    <ClInclude Include="..\Classes\BugsTest\Bug-PageViewLayout.h" />
     <ClInclude Include="..\Classes\BugsTest\Bug-1159.h" />
     <ClInclude Include="..\Classes\BugsTest\Bug-1174.h" />
     <ClInclude Include="..\Classes\BugsTest\Bug-350.h" />
@@ -496,8 +496,8 @@
     <ClCompile Include="..\Classes\Box2DTestBed\TestEntries.cpp" />
     <ClCompile Include="..\Classes\Box2DTest\Box2dTest.cpp" />
     <ClCompile Include="..\Classes\BugsTest\Bug-12847.cpp" />
+    <ClCompile Include="..\Classes\BugsTest\Bug-15594.cpp" />
     <ClCompile Include="..\Classes\BugsTest\Bug-CCDrawNode.cpp" />
-    <ClCompile Include="..\Classes\BugsTest\Bug-PageViewLayout.cpp" />
     <ClCompile Include="..\Classes\BugsTest\Bug-1159.cpp" />
     <ClCompile Include="..\Classes\BugsTest\Bug-1174.cpp" />
     <ClCompile Include="..\Classes\BugsTest\Bug-350.cpp" />
