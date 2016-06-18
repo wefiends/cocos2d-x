@@ -60,7 +60,7 @@ extern "C"
 #define STBI_ONLY_PNG
 #define STBI_NO_STDIO
 #define STB_IMAGE_IMPLEMENTATION
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #define STBI_NEON
 #endif
 #include "stb_image.h"
@@ -1683,6 +1683,8 @@ bool Image::initWithATITCData(const unsigned char *data, ssize_t dataLen)
         height >>= 1;
     }
     /* end load the mipmaps */
+
+    _hasPremultipliedAlpha = false;
     
     return true;
 }
