@@ -38,15 +38,15 @@ include(platform/CMakeLists.txt)
 include(physics/CMakeLists.txt)
 include(physics3d/CMakeLists.txt)
 include(math/CMakeLists.txt)
-include(navmesh/CMakeLists.txt)
+#include(navmesh/CMakeLists.txt)
 include(renderer/CMakeLists.txt)
-include(vr/CMakeLists.txt)
+#include(vr/CMakeLists.txt)
 include(base/CMakeLists.txt)
 include(deprecated/CMakeLists.txt)
-include(ui/CMakeLists.txt)
+#include(ui/CMakeLists.txt)
 include(network/CMakeLists.txt)
 include(audio/CMakeLists.txt)
-include(storage/CMakeLists.txt)
+#include(storage/CMakeLists.txt)
 
 if(BUILD_EDITOR_COCOSBUILDER)
 include(editor-support/cocosbuilder/CMakeLists.txt)
@@ -72,16 +72,16 @@ set(COCOS_SRC cocos2d.cpp
     ${COCOS_PHYSICS_SRC}
     ${COCOS_PHYSICS3D_SRC}
     ${COCOS_MATH_SRC}
-    ${COCOS_NAVMESH_SRC}
+    #${COCOS_NAVMESH_SRC}
     ${COCOS_RENDERER_SRC}
-    ${COCOS_VR_SRC}
+    #${COCOS_VR_SRC}
     ${COCOS_BASE_SRC}
     ${COCOS_AUDIO_SRC}
-    ${COCOS_UI_SRC}
+    #${COCOS_UI_SRC}
     ${COCOS_DEPRECATED_SRC}
     ${COCOS_NETWORK_SRC}
-    ${COCOS_EDITOR_SUPPORT_SRC}
-    ${COCOS_EXTENSIONS_SRC}
+    #${COCOS_EDITOR_SUPPORT_SRC}
+    #${COCOS_EXTENSIONS_SRC}
     )
 
   #todo: provide prebuild versions of the xx libs for all platforms
@@ -140,7 +140,7 @@ elseif(MACOSX OR APPLE)
 elseif(ANDROID)
   set(PLATFORM_SPECIFIC_LIBS GLESv1_CM GLESv2 EGL log android OpenSLES)
   get_filename_component(__module_path "${CMAKE_TOOLCHAIN_FILE}" DIRECTORY)
-  include(${__module_path}/AndroidNdkModules.cmake)
+  include(${__module_path}/share/cmake-3.6/Modules/AndroidNdkModules.cmake)
   android_ndk_import_module_cpufeatures()
 else()
   message( FATAL_ERROR "Unsupported platform, CMake will exit" )

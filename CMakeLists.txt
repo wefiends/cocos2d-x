@@ -80,6 +80,7 @@ if (CMAKE_FIND_ROOT_PATH AND USE_PREBUILT_LIBS)
   # Adds cocos2d-x external folder to the list of valid include/library paths when cross-compiling and using prebuilds
   set(CMAKE_FIND_ROOT_PATH ${CMAKE_FIND_ROOT_PATH} ${COCOS_EXTERNAL_DIR})
 endif ()
+  set(CMAKE_FIND_ROOT_PATH ${CMAKE_FIND_ROOT_PATH} ${COCOS_EXTERNAL_DIR})
 
 include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}
