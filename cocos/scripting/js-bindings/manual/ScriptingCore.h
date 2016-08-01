@@ -40,7 +40,7 @@
 #include <assert.h>
 #include <memory>
 
-#define ENGINE_VERSION "Cocos2d-JS v3.11"
+#define ENGINE_VERSION "Cocos2d-JS v3.12"
 
 void js_log(const char *format, ...);
 
@@ -289,7 +289,7 @@ public:
      @param path @~english The script file path
      @return @~english Script object
      */
-    JSScript* getScript(const char *path);
+    JS::PersistentRootedScript* getScript(const char *path);
     
     /**@~english
      * Compile the specified js file
@@ -297,7 +297,7 @@ public:
      * @param global    @~english The js global object
      * @param cx        @~english The js context
      */
-    void compileScript(const char *path, JS::HandleObject global, JSContext* cx = NULL);
+    JS::PersistentRootedScript* compileScript(const char *path, JS::HandleObject global, JSContext* cx = NULL);
     
     /**@~english
      * Run the specified js file
@@ -345,7 +345,7 @@ public:
      * Gets the cached script objects for all executed js file
      * @return @~english The cached script object map
      */
-    std::unordered_map<std::string, JSScript*> &getFileScript();
+    std::unordered_map<std::string, JS::PersistentRootedScript*>& getFileScript();
     /**@~english
      * Clean all script objects
      */

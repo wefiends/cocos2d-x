@@ -1,7 +1,5 @@
 /****************************************************************************
- Copyright (c) 2008-2010 Ricardo Quesada
- Copyright (c) 2011-2012 cocos2d-x.org
- Copyright (c) 2013-2014 Chukong Technologies Inc.
+ Copyright (c) 2013 cocos2d-x.org
 
  http://www.cocos2d-x.org
 
@@ -24,18 +22,31 @@
  THE SOFTWARE.
  ****************************************************************************/
 
+#ifndef _VR_TEST_H_
+#define _VR_TEST_H_
 
-var UITextAtlasEditorTest = UIBaseLayer.extend({
-    ctor: function () {
-        this._super();
-        var root = this._parseUIFile("ccs-res/cocosui/UIEditorTest/UILabelAtlas/labelatlas_1.json");
+#include "cocos2d.h"
+#include "../BaseTest.h"
+#include <string>
 
-        this._mainNode.addChild(root);
-        
-        var label =ccui.helper.seekWidgetByName(root, "LabelAtlas_961");
-        label.setString("0123456");
+DEFINE_TEST_SUITE(VRTests);
 
-        var back_label =ccui.helper.seekWidgetByName(root, "back");
-        back_label.addTouchEventListener(this.backEvent,this);
-    }
-});
+class VRTestDemo : public TestCase
+{
+protected:
+    std::string    _title;
+
+public:
+};
+
+class VRTest1 : public VRTestDemo
+{
+public:
+    CREATE_FUNC(VRTest1);
+    VRTest1();
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+};
+
+
+#endif

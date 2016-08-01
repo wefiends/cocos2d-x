@@ -1,6 +1,5 @@
 /****************************************************************************
- Copyright (c) 2008-2010 Ricardo Quesada
- Copyright (c) 2011-2012 cocos2d-x.org
+ Copyright (c) 2012 cocos2d-x.org
  Copyright (c) 2013-2014 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
@@ -24,13 +23,59 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-var UIImageViewEditorTest = UIBaseLayer.extend({
-    ctor: function () {
-        this._super();
-        var root = this._parseUIFile("ccs-res/cocosui/UIEditorTest/UIImageView/ImageView_1.json");
-        this._mainNode.addChild(root);
+#include "VRTest.h"
 
-        var back_label =ccui.helper.seekWidgetByName(root, "back");
-        back_label.addTouchEventListener(this.backEvent,this);
-    }
-});
+USING_NS_CC;
+
+VRTests::VRTests()
+{
+    ADD_TEST_CASE(VRTest1);
+};
+
+//------------------------------------------------------------------
+//
+// VRTest1
+//
+//------------------------------------------------------------------
+
+VRTest1::VRTest1()
+{
+    auto size = Director::getInstance()->getVisibleSize();
+
+    auto image = Sprite::create("Images/background.png");
+    image->setPosition(size/2);
+    addChild(image);
+
+    auto button = MenuItemFont::create("Enable / Disable VR", [](Ref* ref){
+
+        auto glview = Director::getInstance()->getOpenGLView();
+        auto vrimpl = glview->getVR();
+        if (vrimpl)
+        {
+            glview->setVR(nullptr);
+        }
+        else
+        {
+            auto genericvr = new VRGenericRenderer;
+            glview->setVR(genericvr);
+        }
+    });
+    button->setFontSizeObj(16);
+    auto menu = Menu::create(button, nullptr);
+    addChild(menu);
+
+    menu->setPosition(size / 6 );
+}
+
+std::string VRTest1::title() const
+{
+    return "Testing Generic VR";
+}
+
+std::string VRTest1::subtitle() const
+{
+    return "Enable / Disable it with the button";
+}
+
+
+
