@@ -299,7 +299,7 @@ public:
      @param hAlignment The font horizontal text alignment type.
      @param vAlignment The font vertical text alignment type.
      @param enableWrap Whether enable text wrap or not.
-     @param shrinkFontSize Whether shrink font size when content larger than the dimensions.
+     @param overflow Whether shrink font size when content larger than the dimensions.
      */
     bool initWithString(const char *text,  const std::string &fontName, float fontSize, const Size& dimensions = Size(0, 0), TextHAlignment hAlignment = TextHAlignment::CENTER, TextVAlignment vAlignment = TextVAlignment::TOP, bool enableWrap = true, int overflow = 0);
 
@@ -420,6 +420,9 @@ public:
 
     std::string getPath()const { return _filePath; }
 
+    void setAlphaTexture(Texture2D* alphaTexture);
+
+    GLuint getAlphaTextureName() const;
 public:
     /** Get pixel info map, the key-value pairs is PixelFormat and PixelFormatInfo.*/
     static const PixelFormatInfoMap& getPixelFormatInfoMap();
@@ -557,6 +560,8 @@ protected:
 
     bool _valid;
     std::string _filePath;
+
+    Texture2D* _alphaTexture;
 };
 
 
