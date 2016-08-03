@@ -80,6 +80,10 @@ public:
         JPG,
         //! PNG
         PNG,
+        //! TIFF
+        TIFF,
+        //! WebP
+        WEBP,
         //! PVR
         PVR,
         //! ETC
@@ -97,21 +101,6 @@ public:
         //! Unknown format
         UNKNOWN
     };
-
-    /**
-     * Enables or disables premultiplied alpha for PNG files.
-     *
-     *  @param enabled (default: true)
-     */
-    static void setPNGPremultipliedAlphaEnabled(bool enabled) { PNG_PREMULTIPLIED_ALPHA_ENABLED = enabled; }
-    
-    /** treats (or not) PVR files as if they have alpha premultiplied.
-     Since it is impossible to know at runtime if the PVR images have the alpha channel premultiplied, it is
-     possible load them as if they have (or not) the alpha channel premultiplied.
-     
-     By default it is disabled.
-     */
-    static void setPVRImagesHavePremultipliedAlpha(bool haveAlphaPremultiplied);
 
     /**
     @brief Load the image from the specified path.
@@ -157,6 +146,15 @@ public:
      @param    isToRGB        whether the image is saved as RGB format.
      */
     bool saveToFile(const std::string &filename, bool isToRGB = true);
+    
+    
+    /** treats (or not) PVR files as if they have alpha premultiplied.
+     Since it is impossible to know at runtime if the PVR images have the alpha channel premultiplied, it is
+     possible load them as if they have (or not) the alpha channel premultiplied.
+     
+     By default it is disabled.
+     */
+    static void setPVRImagesHavePremultipliedAlpha(bool haveAlphaPremultiplied);
 
 protected:
 #if CC_USE_WIC
@@ -165,6 +163,8 @@ protected:
 #endif
     bool initWithJpgData(const unsigned char *  data, ssize_t dataLen);
     bool initWithPngData(const unsigned char * data, ssize_t dataLen);
+    bool initWithTiffData(const unsigned char * data, ssize_t dataLen);
+    bool initWithWebpData(const unsigned char * data, ssize_t dataLen);
     bool initWithPVRData(const unsigned char * data, ssize_t dataLen);
     bool initWithPVRv2Data(const unsigned char * data, ssize_t dataLen);
     bool initWithPVRv3Data(const unsigned char * data, ssize_t dataLen);
@@ -186,10 +186,6 @@ protected:
      It's same as define but it respects namespaces
      */
     static const int MIPMAP_MAX = 16;
-    /**
-     @brief Determine whether we premultiply alpha for png files.
-     */
-    static bool PNG_PREMULTIPLIED_ALPHA_ENABLED;
     unsigned char *_data;
     ssize_t _dataLen;
     int _width;
@@ -206,8 +202,8 @@ protected:
 
 protected:
     // noncopyable
-    Image(const Image& rImg);
-    Image& operator=(const Image&);
+    Image(const Image&    rImg);
+    Image & operator=(const Image&);
     
     /*
      @brief The same result as with initWithImageFile, but thread safe. It is caused by

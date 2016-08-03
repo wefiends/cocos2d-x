@@ -88,14 +88,6 @@ set(COCOS_SRC cocos2d.cpp
   include_directories(../external/xxtea)
   include_directories(../external/clipper)
 
-if (${ANDROID_ABI} STREQUAL "armeabi-v7a")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_NEON=1")
-
-  # make a list of neon files and add neon compiling flags to them
-  set_property(SOURCE platform/CCImage.cpp
-               APPEND_STRING PROPERTY COMPILE_FLAGS " -mfpu=neon ")
-endif ()
-
 add_library(cocos2dInternal ${COCOS_SRC})
 
 set_target_properties(cocos2dInternal
