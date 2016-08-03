@@ -60,7 +60,7 @@ extern "C"
 #define STBI_ONLY_PNG
 #define STBI_NO_STDIO
 #define STB_IMAGE_IMPLEMENTATION
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#if (HAVE_NEON || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #define STBI_NEON
 #endif
 #include "stb_image.h"
